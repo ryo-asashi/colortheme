@@ -1,8 +1,8 @@
 # colortheme
 
-**colortheme** is a lightweight, zero-dependency R package providing a
-unified interface for managing, customizing, and applying qualitative,
-sequential, and diverging color themes.
+**colortheme** is a lightweight R package providing a unified interface
+for managing, customizing, and applying qualitative, sequential, and
+diverging color themes.
 
 It acts as a versatile bridge between base R graphics, custom color
 definitions, and popular palette collections (**grDevices**,
