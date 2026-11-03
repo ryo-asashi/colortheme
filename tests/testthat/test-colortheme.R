@@ -155,7 +155,7 @@ test_that("register_colortheme(), colorthemes(), and init_colorthemes() manage r
   expect_error(register_colortheme(c("red", "blue"), name = "bad?a=1", env = tmp_env), "reserved")
 
   # Initialize full suite into temporary environment and clear
-  init_colorthemes(env = tmp_env, clear.env = TRUE)
+  init_colortheme(env = tmp_env, clear.env = TRUE)
   expect_gt(nrow(colorthemes(env = tmp_env)), 10L)
 })
 
