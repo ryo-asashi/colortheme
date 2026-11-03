@@ -7,6 +7,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **colortheme** is a lightweight, zero-dependency R package providing a

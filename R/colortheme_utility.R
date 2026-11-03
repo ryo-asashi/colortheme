@@ -12,7 +12,7 @@
 #' @returns
 #' A character vector of hexadecimal color codes.
 #'
-#' @seealso \code{\link{colortheme}}, \code{\link{as_palette}}, \code{\link{scale_color_theme}}
+#' @seealso \code{\link{colortheme}}
 #'
 #' @examples
 #' # Continuous mapping (Sequential)
@@ -84,7 +84,7 @@ rescale <- function(x, middle = NULL) {
 #'   \item \code{as_ramp()} returns a ramp function taking a numeric vector \code{x} in \code{[0, 1]} and returning corresponding colors.
 #' }
 #'
-#' @seealso \code{\link{colortheme}}, \code{\link{map_to_colors}}
+#' @seealso \code{\link{colortheme}}
 #'
 #' @examples
 #' pal <- as_palette("Okabe-Ito")

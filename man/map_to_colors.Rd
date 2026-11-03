@@ -31,5 +31,5 @@ plot(iris$Sepal.Length, iris$Sepal.Width,
      col = map_to_colors(iris$Species, "Set 2"), pch = 19)
 }
 \seealso{
-\code{\link{colortheme}}, \code{\link{as_palette}}, \code{\link{scale_color_theme}}
+\code{\link{colortheme}}
 }

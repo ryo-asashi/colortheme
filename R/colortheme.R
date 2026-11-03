@@ -48,11 +48,12 @@
 #' @returns
 #' \code{colortheme()} returns a \code{"colortheme"} object containing \code{$palette()} and \code{$ramp()} functions along with theme metadata.
 #'
-#' @seealso \code{\link{colorthemes}}, \code{\link{register_colortheme}}, \code{\link{map_to_colors}}, \code{\link{scale_color_theme}}
+#' @seealso \code{\link{colorthemes}}, \code{\link{register_colortheme}}, \code{\link{as_palette}}, \code{\link{map_to_colors}}, \code{\link{scale_color_theme}}
 #'
 #' @examples
 #' # Retrieve a pre-defined theme
 #' ct <- colortheme("Mako")
+#' print(ct)
 #' ct$palette(5L)
 #' ct$ramp(seq.int(0, 1, length.out = 5))
 #'

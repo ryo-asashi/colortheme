@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **colortheme** is a lightweight, zero-dependency R package providing a unified interface for managing, customizing, and applying qualitative, sequential, and diverging color themes.
@@ -109,7 +110,6 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
 ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
   geom_tile() +
   scale_fill_theme("RdBu", middle = 0.017)
-
 ```
 
 

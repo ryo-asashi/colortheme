@@ -63,5 +63,5 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
 }
 }
 \seealso{
-\code{\link{colortheme}}, \code{\link{map_to_colors}}
+\code{\link{colortheme}}
 }

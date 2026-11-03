@@ -43,5 +43,5 @@ ramp <- as_ramp("Viridis")
 ramp(c(0, 0.5, 1.0))
 }
 \seealso{
-\code{\link{colortheme}}, \code{\link{map_to_colors}}
+\code{\link{colortheme}}
 }

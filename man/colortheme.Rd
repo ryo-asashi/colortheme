@@ -115,6 +115,7 @@ When retrieving a registered theme by string, you can use a compact URL-like syn
 \examples{
 # Retrieve a pre-defined theme
 ct <- colortheme("Mako")
+print(ct)
 ct$palette(5L)
 ct$ramp(seq.int(0, 1, length.out = 5))
 
@@ -131,5 +132,5 @@ ct <- colortheme(ct, type = "qualitative", reverse = TRUE)
 ct$palette(5L)
 }
 \seealso{
-\code{\link{colorthemes}}, \code{\link{register_colortheme}}, \code{\link{map_to_colors}}, \code{\link{scale_color_theme}}
+\code{\link{colorthemes}}, \code{\link{register_colortheme}}, \code{\link{as_palette}}, \code{\link{map_to_colors}}, \code{\link{scale_color_theme}}
 }

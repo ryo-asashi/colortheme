@@ -19,7 +19,7 @@
 #' @returns
 #' A \code{ggplot2} scale object (\code{"ScaleContinuous"} or \code{"ScaleDiscrete"}).
 #'
-#' @seealso \code{\link{colortheme}}, \code{\link{map_to_colors}}
+#' @seealso \code{\link{colortheme}}
 #'
 #' @examples
 #' if (requireNamespace("ggplot2", quietly = TRUE)) {
