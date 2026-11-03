@@ -41,9 +41,7 @@ A character vector of hexadecimal color codes.
 
 ## See also
 
-[`colortheme`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md),
-[`as_palette`](https://ryo-asashi.github.io/colortheme/reference/as_palette.md),
-[`scale_color_theme`](https://ryo-asashi.github.io/colortheme/reference/scale_color_theme.md)
+[`colortheme`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md)
 
 ## Examples
 

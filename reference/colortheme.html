@@ -187,13 +187,31 @@ It acts as a generic dispatcher that can retrieve a pre-defined theme by name, c
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="colorthemes.html">colorthemes</a></code>, <code><a href="colorthemes.html">register_colortheme</a></code>, <code><a href="map_to_colors.html">map_to_colors</a></code>, <code><a href="scale_color_theme.html">scale_color_theme</a></code></p></div>
+    <div class="dont-index"><p><code><a href="colorthemes.html">colorthemes</a></code>, <code><a href="colorthemes.html">register_colortheme</a></code>, <code><a href="as_palette.html">as_palette</a></code>, <code><a href="map_to_colors.html">map_to_colors</a></code>, <code><a href="scale_color_theme.html">scale_color_theme</a></code></p></div>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Retrieve a pre-defined theme</span></span></span>
 <span class="r-in"><span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu">colortheme</span><span class="op">(</span><span class="st">"Mako"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">ct</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sequential Color Theme: 'Mako'</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kernel Class: palette</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Options:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  kernel.size      : Inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  reverse.method   : "kernel.args$rev &lt;- !kernel.args$rev"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  palette.formatter: "interpolate"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  palette.reverse  : FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ramp.rescaler    : c(0, 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  na.color         : NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Kernel Arguments:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  palette: "Mako"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  alpha  : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  rev    : FALSE</span>
+<span class="r-plt img"><img src="colortheme-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"</span>
 <span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>

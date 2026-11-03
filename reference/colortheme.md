@@ -177,6 +177,7 @@ modifications:
 
 [`colorthemes`](https://ryo-asashi.github.io/colortheme/reference/colorthemes.md),
 [`register_colortheme`](https://ryo-asashi.github.io/colortheme/reference/colorthemes.md),
+[`as_palette`](https://ryo-asashi.github.io/colortheme/reference/as_palette.md),
 [`map_to_colors`](https://ryo-asashi.github.io/colortheme/reference/map_to_colors.md),
 [`scale_color_theme`](https://ryo-asashi.github.io/colortheme/reference/scale_color_theme.md)
 
@@ -185,6 +186,24 @@ modifications:
 ``` r
 # Retrieve a pre-defined theme
 ct <- colortheme("Mako")
+print(ct)
+#> Sequential Color Theme: 'Mako'
+#> 
+#> Kernel Class: palette
+#> 
+#> Options:
+#>  kernel.size      : Inf
+#>  reverse.method   : "kernel.args$rev <- !kernel.args$rev"
+#>  palette.formatter: "interpolate"
+#>  palette.reverse  : FALSE
+#>  ramp.rescaler    : c(0, 1)
+#>  na.color         : NA
+#> 
+#> Kernel Arguments:
+#>  palette: "Mako"
+#>  alpha  : NULL
+#>  rev    : FALSE
+
 ct$palette(5L)
 #> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"
 ct$ramp(seq.int(0, 1, length.out = 5))

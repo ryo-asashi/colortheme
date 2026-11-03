@@ -81,8 +81,7 @@ based on the theme's type:
 
 ## See also
 
-[`colortheme`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md),
-[`map_to_colors`](https://ryo-asashi.github.io/colortheme/reference/map_to_colors.md)
+[`colortheme`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md)
 
 ## Examples
 
