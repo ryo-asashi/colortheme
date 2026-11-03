@@ -1,0 +1,112 @@
+# List and Register Color Themes
+
+`colorthemes()` returns a data frame listing available color themes in
+the registry. `register_colortheme()` registers a custom color theme
+into the registry.
+
+## Usage
+
+``` r
+colorthemes(name = NULL, source = NULL, type = NULL, env = NULL)
+
+register_colortheme(
+  kernel,
+  kernel.args = list(),
+  options = list(),
+  name = "newtheme",
+  source = "custom",
+  type = NULL,
+  env = NULL
+)
+```
+
+## Arguments
+
+- name:
+
+  for `colorthemes()`, a character vector of theme names to match
+  (case-insensitive prefix matching). For `register_colortheme()`, a
+  single string for the new theme name.
+
+- source:
+
+  for `colorthemes()`, a character vector of sources to match
+  (case-insensitive prefix matching). For `register_colortheme()`, a
+  single string for the source name.
+
+- type:
+
+  a character string or vector specifying the theme type(s):
+  `"sequential"`, `"diverging"`, or `"qualitative"`.
+
+- env:
+
+  an environment where color themes are registered. Defaults to the
+  package registry (`getOption("colortheme.registry")`).
+
+- kernel:
+
+  a color vector, a palette function, a ramp function, a `"colortheme"`
+  object, or a length-2 character vector/list for lazy evaluation.
+
+- kernel.args:
+
+  a list of arguments passed to the color kernel.
+
+- options:
+
+  a list of option values controlling the color theme's behavior.
+
+## Value
+
+- `colorthemes()`: A data frame with columns `"name"`, `"source"`, and
+  `"type"`.
+
+- `register_colortheme()`: Invisibly returns the metadata of the
+  previous theme that was overwritten (or `NULL` if none existed).
+
+## Details
+
+`colorthemes()` extracts metadata from the registry environment and
+structures it into a data frame, allowing users to discover themes by
+`name`, `source`, and `type` (with case-insensitive prefix matching).
+
+`register_colortheme()` takes a color vector, a color-generating
+function, or an existing `"colortheme"` object and registers it under a
+specified `name` and `source` (defaulting to `"custom/newtheme"`). To
+keep the registry lightweight, the `kernel` argument supports lazy
+loading: pass a character vector or list of length 2 where the first
+element is an R expression returning a kernel (e.g., `"rainbow"`) and
+the second is the namespace (e.g., `"grDevices"`).
+
+## See also
+
+[`colortheme`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md)
+
+## Examples
+
+``` r
+# List all available themes
+head(colorthemes())
+#>            name    source      type
+#> 1      ArmyRose grDevices diverging
+#> 2        Berlin grDevices diverging
+#> 3      Blue-Red grDevices diverging
+#> 4    Blue-Red 2 grDevices diverging
+#> 5    Blue-Red 3 grDevices diverging
+#> 6 Blue-Yellow 2 grDevices diverging
+
+# Case-insensitive prefix matching
+head(colorthemes(name = "hc"))
+#>   name     source        type
+#> 1  HCL colortheme qualitative
+
+# Register a custom theme
+register_colortheme(
+  kernel = c("#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"),
+  name = "sand", source = "custom", type = "sequential"
+)
+colorthemes(name = "sand")
+#>   name source       type
+#> 1 sand custom sequential
+```
