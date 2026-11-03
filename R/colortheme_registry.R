@@ -165,9 +165,9 @@ register_colortheme <- function(
 }
 
 
-# internal helpers to call
+# internal helpers
 
-init_colorthemes <- function(
+init_colortheme <- function(
     pkgname = "colortheme", overwrite.options = FALSE,
     env = colortheme_registry(), clear.env = FALSE
 ) {
