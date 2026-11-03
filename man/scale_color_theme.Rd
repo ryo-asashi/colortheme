@@ -50,8 +50,8 @@ A \code{ggplot2} scale object (\code{"ScaleContinuous"} or \code{"ScaleDiscrete"
 \details{
 This function automatically selects the appropriate \strong{ggplot2} scale based on the theme's type:
 \itemize{
-  \item If the theme is \code{"qualitative"}, a discrete scale is used by default (\code{discrete = TRUE}).
-  \item If the theme is \code{"sequential"} or \code{"diverging"}, a continuous scale is used by default. Diverging themes use \code{scales::rescale_mid()} to center the gradient around \code{middle}.
+\item If the theme is \code{"qualitative"}, a discrete scale is used by default (\code{discrete = TRUE}).
+\item If the theme is \code{"sequential"} or \code{"diverging"}, a continuous scale is used by default. Diverging themes use \code{scales::rescale_mid()} to center the gradient around \code{middle}.
 }
 }
 \examples{

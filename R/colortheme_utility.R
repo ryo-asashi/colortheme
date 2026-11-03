@@ -21,7 +21,7 @@
 #' # Discrete mapping (Qualitative)
 #' plot(iris$Sepal.Length, iris$Sepal.Width,
 #'      col = map_to_colors(iris$Species, "Set 2"), pch = 19)
-#' @export
+#' @export map_to_colors
 map_to_colors <- function(x, theme = NULL, middle = 0, na.value = NULL) {
   discrete <- is_discrete(x)
   theme <- theme %||% colortheme_defaults(if (discrete) "qualitative" else "sequential")
@@ -92,7 +92,7 @@ rescale <- function(x, middle = NULL) {
 #'
 #' ramp <- as_ramp("Viridis")
 #' ramp(c(0, 0.5, 1.0))
-#' @export
+#' @export as_palette
 as_palette <- function(x, ...)
 UseMethod("as_palette")
 
@@ -115,7 +115,7 @@ as_palette.default <- function(x, ...) {
 
 
 #' @rdname as_palette
-#' @export
+#' @export as_ramp
 as_ramp <- function(x, ...)
 UseMethod("as_ramp")
 

@@ -68,7 +68,7 @@ colortheme_defaults <- function(
 # exports
 
 #' @rdname colorthemes
-#' @export
+#' @export colorthemes
 colorthemes <- function(name = NULL, source = NULL, type = NULL, env = NULL) {
   env <- env %||% colortheme_registry()
   nst <- c("name", "source", "type")
@@ -130,7 +130,7 @@ colorthemes <- function(name = NULL, source = NULL, type = NULL, env = NULL) {
 
 
 #' @rdname colorthemes
-#' @export
+#' @export register_colortheme
 register_colortheme <- function(
     kernel, kernel.args = list(), options = list(), name = "newtheme",
     source = "custom", type = NULL, env = NULL

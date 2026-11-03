@@ -67,7 +67,7 @@
 #' # Modify an existing theme
 #' ct <- colortheme(ct, type = "qualitative", reverse = TRUE)
 #' ct$palette(5L)
-#' @export
+#' @export colortheme
 colortheme <- function(object, ...)
 UseMethod("colortheme")
 

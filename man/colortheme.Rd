@@ -92,9 +92,9 @@ A \code{"colortheme"} object is a list-like structure that provides two primary 
 
 \code{colortheme()} dispatches based on the class of \code{object}:
 \itemize{
-  \item If \code{object} is a character string (e.g., \code{"Viridis"}, \code{"grDevices/RdBu_r@q?alpha=.5"}), it is parsed according to the theme name syntax and loaded from the registry.
-  \item If \code{object} is a color kernel (a character vector of colors, a palette function, or a ramp function), a new color theme is constructed.
-  \item If \code{object} is already a \code{"colortheme"} object, a modified copy is returned with updated settings.
+\item If \code{object} is a character string (e.g., \code{"Viridis"}, \code{"grDevices/RdBu_r@q?alpha=.5"}), it is parsed according to the theme name syntax and loaded from the registry.
+\item If \code{object} is a color kernel (a character vector of colors, a palette function, or a ramp function), a new color theme is constructed.
+\item If \code{object} is already a \code{"colortheme"} object, a modified copy is returned with updated settings.
 }
 }
 \section{Theme Name Syntax}{
@@ -104,11 +104,11 @@ When retrieving a registered theme by string, you can use a compact URL-like syn
 \code{"[(source)/](name)[_r][@(type)][?(query)]"}
 
 \itemize{
-  \item \code{source}: (optional) the source package or collection (e.g., \code{"grDevices"}).
-  \item \code{name}: the name of the theme (e.g., \code{"RdBu"}).
-  \item \code{"_r"}: (optional) suffix to reverse the color order.
-  \item \code{type}: (optional) desired theme type, matched against \code{"sequential"}, \code{"diverging"}, or \code{"qualitative"} (abbreviations like \code{"s"}, \code{"d"}, \code{"q"} or \code{"seq"}, \code{"div"}, \code{"qual"} are supported).
-  \item \code{query}: (optional) key-value pairs separated by \code{;} or \code{&} (e.g., \code{"?alpha=0.5;na.color='gray50'"}) to override theme metadata, \code{options}, or \code{kernel.args}.
+\item \code{source}: (optional) the source package or collection (e.g., \code{"grDevices"}).
+\item \code{name}: the name of the theme (e.g., \code{"RdBu"}).
+\item \code{"_r"}: (optional) suffix to reverse the color order.
+\item \code{type}: (optional) desired theme type, matched against \code{"sequential"}, \code{"diverging"}, or \code{"qualitative"} (abbreviations like \code{"s"}, \code{"d"}, \code{"q"} or \code{"seq"}, \code{"div"}, \code{"qual"} are supported).
+\item \code{query}: (optional) key-value pairs separated by \code{;} or \code{&} (e.g., \code{"?alpha=0.5;na.color='gray50'"}) to override theme metadata, \code{options}, or \code{kernel.args}.
 }
 }
 

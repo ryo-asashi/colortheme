@@ -28,7 +28,7 @@
 #'   d + scale_color_theme("Set 1")
 #'   d + scale_color_theme("SunsetDark", discrete = TRUE)
 #' }
-#' @export
+#' @export scale_color_theme
 scale_color_theme <- function(
     theme = NULL, ..., discrete = NULL, middle = 0, aesthetics = "colour"
 ) {
@@ -68,7 +68,7 @@ scale_color_theme <- function(
 
 
 #' @rdname scale_color_theme
-#' @export
+#' @export scale_colour_theme
 scale_colour_theme <- function(
     theme = NULL, ..., discrete = NULL, middle = 0, aesthetics = "colour"
 ) {
@@ -80,7 +80,7 @@ scale_colour_theme <- function(
 
 
 #' @rdname scale_color_theme
-#' @export
+#' @export scale_fill_theme
 scale_fill_theme <- function(
     theme = NULL, ..., discrete = NULL, middle = 0, aesthetics = "fill"
 ) {

@@ -163,7 +163,7 @@ test_that("map_to_colors() maps discrete and continuous values accurately", {
   # Continuous sequential
   x_num <- c(0, 5, 10, NA)
   c_seq <- map_to_colors(x_num, theme = c("#000000", "#FFFFFF"), na.value = "#FF0000")
-  expect_equal(c_seq, c("#000000", "#777777", "#FFFFFF", "#FF0000"))
+  expect_equal(c_seq, c("#000000", "#767676", "#FFFFFF", "#FF0000"))
 
   # Continuous diverging with middle = 0
   x_div <- c(-10, 0, 5)

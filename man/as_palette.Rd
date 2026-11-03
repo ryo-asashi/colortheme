@@ -28,8 +28,8 @@ as_ramp(x, ...)
 }
 \value{
 \itemize{
-  \item \code{as_palette()} returns a palette function taking an integer \code{n} and returning \code{n} colors.
-  \item \code{as_ramp()} returns a ramp function taking a numeric vector \code{x} in \code{[0, 1]} and returning corresponding colors.
+\item \code{as_palette()} returns a palette function taking an integer \code{n} and returning \code{n} colors.
+\item \code{as_ramp()} returns a ramp function taking a numeric vector \code{x} in \code{[0, 1]} and returning corresponding colors.
 }
 }
 \description{

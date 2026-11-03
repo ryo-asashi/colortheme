@@ -34,8 +34,8 @@ register_colortheme(
 }
 \value{
 \itemize{
-  \item \code{colorthemes()}: A data frame with columns \code{"name"}, \code{"source"}, and \code{"type"}.
-  \item \code{register_colortheme()}: Invisibly returns the metadata of the previous theme that was overwritten (or \code{NULL} if none existed).
+\item \code{colorthemes()}: A data frame with columns \code{"name"}, \code{"source"}, and \code{"type"}.
+\item \code{register_colortheme()}: Invisibly returns the metadata of the previous theme that was overwritten (or \code{NULL} if none existed).
 }
 }
 \description{
