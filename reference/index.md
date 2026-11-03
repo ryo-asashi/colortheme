@@ -1,6 +1,6 @@
 # Package index
 
-## Color Themes for Graphics
+## Color Themes
 
 - [`colortheme()`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md)
   [`plot(`*`<colortheme>`*`)`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md)
