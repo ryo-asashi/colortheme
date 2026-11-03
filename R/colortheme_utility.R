@@ -1,0 +1,143 @@
+#' Map Values to Colors using Color Themes
+#'
+#' @description
+#' \code{map_to_colors()} maps a vector of data values to a vector of hexadecimal color codes based on a specified color theme.
+#' It automatically handles both discrete and continuous variables, appropriately scaling values and handling missing data.
+#'
+#' @param x a vector of data values (discrete or continuous) to be mapped to colors.
+#' @param theme a color theme name (e.g., \code{"Viridis"}), a \code{"colortheme"} object, a character vector of color names, or a palette/ramp function. See \code{\link{colortheme}} for details.
+#' @param middle a numeric value specifying the midpoint for diverging color themes. Default is \code{0}.
+#' @param na.value a character string specifying the color for \code{NA} values. If \code{NULL} (default), falls back to the theme's \code{na.color} option.
+#'
+#' @returns
+#' A character vector of hexadecimal color codes.
+#'
+#' @seealso \code{\link{colortheme}}, \code{\link{as_palette}}, \code{\link{scale_color_theme}}
+#'
+#' @examples
+#' # Continuous mapping (Sequential)
+#' plot(cars, col = map_to_colors(cars$speed, "Viridis"), pch = 19)
+#'
+#' # Discrete mapping (Qualitative)
+#' plot(iris$Sepal.Length, iris$Sepal.Width,
+#'      col = map_to_colors(iris$Species, "Set 2"), pch = 19)
+#' @export
+map_to_colors <- function(x, theme = NULL, middle = 0, na.value = NULL) {
+  discrete <- is_discrete(x)
+  theme <- theme %||% colortheme_defaults(if (discrete) "qualitative" else "sequential")
+  theme <- colortheme(theme)
+  if (is.null(na.value))
+    na.value <- theme$options$na.color %||% NA
+  if (discrete) {
+    x <- as.integer(as.factor(x))
+    cols <- theme$palette(max(x, na.rm = TRUE))[x]
+  } else {
+    if (theme$type == "qualitative") {
+      stop("qualitative color theme can't be used for continuous variable", call. = FALSE)
+    } else if (theme$type == "sequential") {
+      cols <- theme$ramp(rescale(x))
+    } else if (theme$type == "diverging") {
+      cols <- theme$ramp(rescale(x, middle = middle))
+    } else {
+      cols <- rep.int(1L, length(x))
+    }
+  }
+  cols[is.na(cols)] <- na.value
+  cols
+}
+
+
+# local helpers
+
+rescale <- function(x, middle = NULL) {
+  if (is.character(x))
+    x <- as.factor(x)
+  if (is.factor(x) || is.logical(x))
+    x <- as.numeric(x)
+  from <- range(x, na.rm = TRUE, finite = TRUE)
+  if (is.null(middle)) {
+    d <- from[2L] - from[1L]
+    if (d == 0)
+      return(ifelse(is.na(x), NA, 0.5))
+    res <- (x - from[1L]) / d
+  } else {
+    d <- 2 * max(abs(from - middle))
+    if (d == 0)
+      return(ifelse(is.na(x), NA, 0.5))
+    res <- (x - middle) / d + 0.5
+  }
+  pmax(0, pmin(1, res))
+}
+
+
+#' Extract Palette or Ramp Function
+#'
+#' @description
+#' \code{as_palette()} and \code{as_ramp()} extract the underlying discrete palette function or continuous color ramp function from a color theme or color kernel.
+#'
+#' @param x a \code{"colortheme"} object, a theme name (character string), a color vector, or a color-generating function.
+#' @param ... additional arguments passed to \code{\link{colortheme}} to modify the theme before extracting the function.
+#'
+#' @returns
+#' \itemize{
+#'   \item \code{as_palette()} returns a palette function taking an integer \code{n} and returning \code{n} colors.
+#'   \item \code{as_ramp()} returns a ramp function taking a numeric vector \code{x} in \code{[0, 1]} and returning corresponding colors.
+#' }
+#'
+#' @seealso \code{\link{colortheme}}, \code{\link{map_to_colors}}
+#'
+#' @examples
+#' pal <- as_palette("Okabe-Ito")
+#' pal(8L)
+#'
+#' ramp <- as_ramp("Viridis")
+#' ramp(c(0, 0.5, 1.0))
+#' @export
+as_palette <- function(x, ...)
+UseMethod("as_palette")
+
+
+#' @rdname as_palette
+#' @exportS3Method colortheme::as_palette
+as_palette.colortheme <- function(x, ...) {
+  if (length(list(...)) > 0L) {
+    x <- modify_theme(x, ...)
+  }
+  x$palette
+}
+
+
+#' @rdname as_palette
+#' @exportS3Method colortheme::as_palette
+as_palette.default <- function(x, ...) {
+  colortheme(x, ...)$palette
+}
+
+
+#' @rdname as_palette
+#' @export
+as_ramp <- function(x, ...)
+UseMethod("as_ramp")
+
+
+#' @rdname as_palette
+#' @exportS3Method colortheme::as_ramp
+as_ramp.colortheme <- function(x, ...) {
+  if (length(list(...)) > 0L) {
+    x <- modify_theme(x, ...)
+  }
+  x$ramp
+}
+
+
+#' @rdname as_palette
+#' @exportS3Method colortheme::as_ramp
+as_ramp.default <- function(x, ...) {
+  if (is.character(x) && length(list(...)) == 0L && (length(x) > 1L || is_color(x))) {
+    if (length(x) > 1L || !is_registered_theme(x)) {
+      return(colors_to_ramp(x))
+    }
+  }
+  colortheme(x, ...)$ramp
+}
+
