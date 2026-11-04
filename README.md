@@ -8,6 +8,8 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/ryo-asashi/colortheme/graph/badge.svg)](https://app.codecov.io/gh/ryo-asashi/colortheme)
 <!-- badges: end -->
 
 **colortheme** is a lightweight R package providing a unified interface
@@ -24,10 +26,10 @@ seamless scale integration for **ggplot2**.
 1.  Unified Dispatcher (`colortheme()`): Effortlessly retrieve
     registered themes by name, build themes from color vectors or
     functions, or modify existing themes on the fly.
-2.  Compact URL-Like Query Syntax: Customize themes instantly using
-    query strings (e.g., reversing order with `_r`, specifying types
-    with `@qual`, or adjusting transparency and missing-value colors
-    with `?alpha=0.5;na.color='gray'`).
+2.  Compact Query Syntax: Customize themes instantly using query strings
+    (e.g., reversing order with `_r`, specifying types with `@qual`, or
+    adjusting transparency and missing-value colors with
+    `?alpha=0.5;na.color='gray'`).
 3.  Dual Functional Interface: Extract discrete palette functions
     (`$palette(n)`) or continuous color ramp functions (`$ramp(x)`) from
     any theme.
@@ -49,11 +51,36 @@ pak::pak("ryo-asashi/colortheme")
 
 ## Quick Start & Core Concepts
 
-### 1. Retrieving and Modifying Themes
+### 1. Discovering and Retrieving Themes
 
-`colortheme()` serves as the central interface. You can load pre-defined
-palettes or apply the compact query syntax to reverse colors, change
-types, or inject options.
+`colorthemes()` helps to find a color theme. You can filter the registry
+by name, source, or type using case-insensitive prefix matching.
+
+``` r
+library(colortheme)
+
+# Find color themes matching "ma"
+colorthemes("ma")
+#>      name      source       type
+#> 1 managua      khroma  diverging
+#> 2 Magenta   grDevices sequential
+#> 3   magma viridisLite sequential
+#> 4    mako viridisLite sequential
+#> 5    Mako   grDevices sequential
+
+# Find color themes from a specific source
+colorthemes(source = "grDevices") |> head(5)
+#>         name    source      type
+#> 1   ArmyRose grDevices diverging
+#> 2     Berlin grDevices diverging
+#> 3   Blue-Red grDevices diverging
+#> 4 Blue-Red 2 grDevices diverging
+#> 5 Blue-Red 3 grDevices diverging
+```
+
+Once you find a theme, `colortheme()` serves as the central interface to
+load and use it. You can retrieve pre-defined palettes or apply the
+compact query syntax to reverse colors, change types, or inject options.
 
 ``` r
 library(colortheme)
@@ -65,7 +92,7 @@ ct$palette(5L)
 ct$ramp(seq.int(0, 1, length.out = 5))
 #> [1] "#4B0054" "#00578A" "#009B94" "#53CC66" "#FDE333"
 
-# Use URL-like query syntax for on-the-fly modifications
+# Use query syntax for on-the-fly modifications
 ct_custom <- colortheme("grDevices/Zissou 1_r@qual?alpha=0.75")
 ct_custom$palette(4L)
 #> [1] "#F5191CBF" "#E8A419BF" "#9FC095BF" "#3B99B1BF"
@@ -96,6 +123,8 @@ scaling and `NA` management.
 
 ``` r
 # Continuous mapping (Sequential)
+par(mfrow = c(1L, 2L))
+plot(cars, col = map_to_colors(cars$speed), pch = 19)
 plot(cars, col = map_to_colors(cars$speed, "Viridis"), pch = 19)
 ```
 
@@ -105,7 +134,9 @@ plot(cars, col = map_to_colors(cars$speed, "Viridis"), pch = 19)
 
 # Discrete mapping (Qualitative)
 plot(iris$Sepal.Length, iris$Sepal.Width,
-     col = map_to_colors(iris$Species, "Set 1"), pch = 19)
+     col = map_to_colors(iris$Species), pch = 19)
+plot(iris$Sepal.Length, iris$Sepal.Width,
+     col = map_to_colors(iris$Species, "Set 2"), pch = 19)
 ```
 
 <img src="man/figures/README-plot_graphics-2.png" width="100%" />
@@ -122,8 +153,8 @@ library(ggplot2)
 
 # Qualitative scale
 ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
-  geom_point() +
-  scale_color_theme("Set 1")
+  geom_point(size = 3) +
+  scale_color_theme("Okabe-Ito")
 ```
 
 <img src="man/figures/README-plot_ggplot2-1.png" width="100%" />
@@ -133,7 +164,7 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
 # Continuous diverging scale with custom midpoint
 ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
   geom_tile() +
-  scale_fill_theme("RdBu", middle = 0.017)
+  scale_fill_theme("Cividis", middle = 0.017)
 ```
 
 <img src="man/figures/README-plot_ggplot2-2.png" width="100%" />
