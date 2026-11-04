@@ -78,7 +78,7 @@ img {
 </h2>
 <ol style="list-style-type: decimal">
 <li>Unified Dispatcher (<code><a href="reference/colortheme.html">colortheme()</a></code>): Effortlessly retrieve registered themes by name, build themes from color vectors or functions, or modify existing themes on the fly.</li>
-<li>Compact URL-Like Query Syntax: Customize themes instantly using query strings (e.g., reversing order with <code>_r</code>, specifying types with <code>@qual</code>, or adjusting transparency and missing-value colors with <code>?alpha=0.5;na.color='gray'</code>).</li>
+<li>Compact Query Syntax: Customize themes instantly using query strings (e.g., reversing order with <code>_r</code>, specifying types with <code>@qual</code>, or adjusting transparency and missing-value colors with <code>?alpha=0.5;na.color='gray'</code>).</li>
 <li>Dual Functional Interface: Extract discrete palette functions (<code>$palette(n)</code>) or continuous color ramp functions (<code>$ramp(x)</code>) from any theme.</li>
 <li>Base R Data Mapping (<code><a href="reference/map_to_colors.html">map_to_colors()</a></code>): Directly map discrete or continuous vectors into hexadecimal color codes for base R plots.</li>
 <li>Seamless <strong>ggplot2</strong> Scales: Automatically apply discrete or continuous scales using <code><a href="reference/scale_color_theme.html">scale_color_theme()</a></code> and <code><a href="reference/scale_color_theme.html">scale_fill_theme()</a></code>, complete with proper midpoint handling for diverging palettes.</li>
@@ -96,10 +96,31 @@ img {
 <h2 id="quick-start--core-concepts">Quick Start &amp; Core Concepts<a class="anchor" aria-label="anchor" href="#quick-start--core-concepts"></a>
 </h2>
 <div class="section level3">
-<h3 id="id_1-retrieving-and-modifying-themes">1. Retrieving and Modifying Themes<a class="anchor" aria-label="anchor" href="#id_1-retrieving-and-modifying-themes"></a>
+<h3 id="id_1-discovering-and-retrieving-themes">1. Discovering and Retrieving Themes<a class="anchor" aria-label="anchor" href="#id_1-discovering-and-retrieving-themes"></a>
 </h3>
-<p><code><a href="reference/colortheme.html">colortheme()</a></code> serves as the central interface. You can load pre-defined palettes or apply the compact query syntax to reverse colors, change types, or inject options.</p>
+<p><code><a href="reference/colorthemes.html">colorthemes()</a></code> helps to find a color theme. You can filter the registry by name, source, or type using case-insensitive prefix matching.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ryo-asashi/colortheme" class="external-link">colortheme</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Find color themes matching "ma"</span></span>
+<span><span class="fu"><a href="reference/colorthemes.html">colorthemes</a></span><span class="op">(</span><span class="st">"ma"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      name      source       type</span></span>
+<span><span class="co">#&gt; 1 managua      khroma  diverging</span></span>
+<span><span class="co">#&gt; 2 Magenta   grDevices sequential</span></span>
+<span><span class="co">#&gt; 3   magma viridisLite sequential</span></span>
+<span><span class="co">#&gt; 4    mako viridisLite sequential</span></span>
+<span><span class="co">#&gt; 5    Mako   grDevices sequential</span></span>
+<span></span>
+<span><span class="co"># Find color themes from a specific source</span></span>
+<span><span class="fu"><a href="reference/colorthemes.html">colorthemes</a></span><span class="op">(</span>source <span class="op">=</span> <span class="st">"grDevices"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt;         name    source      type</span></span>
+<span><span class="co">#&gt; 1   ArmyRose grDevices diverging</span></span>
+<span><span class="co">#&gt; 2     Berlin grDevices diverging</span></span>
+<span><span class="co">#&gt; 3   Blue-Red grDevices diverging</span></span>
+<span><span class="co">#&gt; 4 Blue-Red 2 grDevices diverging</span></span>
+<span><span class="co">#&gt; 5 Blue-Red 3 grDevices diverging</span></span></code></pre></div>
+<p>Once you find a theme, <code><a href="reference/colortheme.html">colortheme()</a></code> serves as the central interface to load and use it. You can retrieve pre-defined palettes or apply the compact query syntax to reverse colors, change types, or inject options.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/ryo-asashi/colortheme" class="external-link">colortheme</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Retrieve a built-in sequential theme and generate colors</span></span>
@@ -109,7 +130,7 @@ img {
 <span><span class="va">ct</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "#4B0054" "#00578A" "#009B94" "#53CC66" "#FDE333"</span></span>
 <span></span>
-<span><span class="co"># Use URL-like query syntax for on-the-fly modifications</span></span>
+<span><span class="co"># Use query syntax for on-the-fly modifications</span></span>
 <span><span class="va">ct_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"grDevices/Zissou 1_r@qual?alpha=0.75"</span><span class="op">)</span></span>
 <span><span class="va">ct_custom</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">4L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "#F5191CBF" "#E8A419BF" "#9FC095BF" "#3B99B1BF"</span></span></code></pre></div>
@@ -118,7 +139,7 @@ img {
 <h3 id="id_2-extracting-palette-and-ramp-functions">2. Extracting Palette and Ramp Functions<a class="anchor" aria-label="anchor" href="#id_2-extracting-palette-and-ramp-functions"></a>
 </h3>
 <p>Using <code><a href="reference/as_palette.html">as_palette()</a></code> and <code><a href="reference/as_palette.html">as_ramp()</a></code>, you can easily extract clean color-generating functions for custom graphics workflows.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Extract a discrete palette function taking n</span></span>
 <span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_palette.html">as_palette</a></span><span class="op">(</span><span class="st">"Okabe-Ito"</span><span class="op">)</span></span>
 <span><span class="fu">pal</span><span class="op">(</span><span class="fl">6L</span><span class="op">)</span></span>
@@ -133,15 +154,19 @@ img {
 <h3 id="id_3-direct-mapping-for-base-r-graphics-map_to_colors">3. Direct Mapping for Base R Graphics (<code>map_to_colors()</code>)<a class="anchor" aria-label="anchor" href="#id_3-direct-mapping-for-base-r-graphics-map_to_colors"></a>
 </h3>
 <p><code><a href="reference/map_to_colors.html">map_to_colors()</a></code> automatically handles factor/character variables (qualitative) and numeric vectors (sequential/diverging) with proper scaling and <code>NA</code> management.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Continuous mapping (Sequential)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cars</span>, col <span class="op">=</span> <span class="fu"><a href="reference/map_to_colors.html">map_to_colors</a></span><span class="op">(</span><span class="va">cars</span><span class="op">$</span><span class="va">speed</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cars</span>, col <span class="op">=</span> <span class="fu"><a href="reference/map_to_colors.html">map_to_colors</a></span><span class="op">(</span><span class="va">cars</span><span class="op">$</span><span class="va">speed</span>, <span class="st">"Viridis"</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_graphics-1.png" width="100%"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Discrete mapping (Qualitative)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Width</span>,</span>
-<span>     col <span class="op">=</span> <span class="fu"><a href="reference/map_to_colors.html">map_to_colors</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span>, <span class="st">"Set 1"</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code></pre></div>
+<span>     col <span class="op">=</span> <span class="fu"><a href="reference/map_to_colors.html">map_to_colors</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Length</span>, <span class="va">iris</span><span class="op">$</span><span class="va">Sepal.Width</span>,</span>
+<span>     col <span class="op">=</span> <span class="fu"><a href="reference/map_to_colors.html">map_to_colors</a></span><span class="op">(</span><span class="va">iris</span><span class="op">$</span><span class="va">Species</span>, <span class="st">"Set 2"</span><span class="op">)</span>, pch <span class="op">=</span> <span class="fl">19</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_graphics-2.png" width="100%"></p>
 </div>
 <div class="section level3">
@@ -149,20 +174,20 @@ img {
 <a class="anchor" aria-label="anchor" href="#id_4-integration-with-ggplot2"></a>
 </h3>
 <p><code><a href="reference/scale_color_theme.html">scale_color_theme()</a></code> automatically detects whether the theme is qualitative or continuous, configuring appropriate <strong>ggplot2</strong> scales under the hood. Diverging themes automatically leverage <code><a href="https://scales.r-lib.org/reference/rescale_mid.html" class="external-link">scales::rescale_mid()</a></code> when a midpoint is specified.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Qualitative scale</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">Sepal.Length</span>, <span class="va">Sepal.Width</span>, colour <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"Set 1"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"Okabe-Ito"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_ggplot2-1.png" width="100%"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Continuous diverging scale with custom midpoint</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">faithfuld</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">waiting</span>, <span class="va">eruptions</span>, fill <span class="op">=</span> <span class="va">density</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_tile</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"RdBu"</span>, middle <span class="op">=</span> <span class="fl">0.017</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"Cividis"</span>, middle <span class="op">=</span> <span class="fl">0.017</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-plot_ggplot2-2.png" width="100%"></p>
 </div>
 </div>
@@ -221,6 +246,7 @@ img {
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
 <li><a href="https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/ryo-asashi/colortheme/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/ryo-asashi/colortheme" class="external-link"><img src="https://codecov.io/gh/ryo-asashi/colortheme/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
