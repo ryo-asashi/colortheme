@@ -99,7 +99,7 @@ head(colorthemes())
 # Case-insensitive prefix matching
 head(colorthemes(name = "hc"))
 #>   name     source        type
-#> 1  HCL colortheme qualitative
+#> 1  hcl colortheme qualitative
 
 # Register a custom theme
 register_colortheme(
@@ -109,4 +109,7 @@ register_colortheme(
 colorthemes(name = "sand")
 #>   name source       type
 #> 1 sand custom sequential
+
+# Remove the custom theme by passing NULL
+register_colortheme(NULL, name = "sand", source = "custom")
 ```
