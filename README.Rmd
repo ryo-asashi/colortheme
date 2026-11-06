@@ -59,8 +59,8 @@ library(colortheme)
 # Find color themes matching "ma"
 colorthemes("ma")
 
-# Find color themes from a specific source
-colorthemes(source = "grDevices") |> head(5)
+# Find qualitative color themes from a specific source
+colorthemes(source = "RColorBrewer", type = "qualitative")
 ```
 
 Once you find a theme, `colortheme()` serves as the central interface to load and use it.
@@ -107,7 +107,7 @@ plot(cars, col = map_to_colors(cars$speed, "Viridis_r"), pch = 19)
 plot(iris$Sepal.Length, iris$Sepal.Width,
      col = map_to_colors(iris$Species), pch = 19)
 plot(iris$Sepal.Length, iris$Sepal.Width,
-     col = map_to_colors(iris$Species, "Set 2"), pch = 19)
+     col = map_to_colors(iris$Species, "muted"), pch = 19)
 ```
 
 ### 4. Integration with **ggplot2**
@@ -121,7 +121,7 @@ library(ggplot2)
 # Qualitative scale
 ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
   geom_point(size = 3) +
-  scale_color_theme("Okabe-Ito_r")
+  scale_color_theme("Set2")
 
 # Continuous diverging scale with custom midpoint
 ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
