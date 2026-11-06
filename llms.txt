@@ -64,14 +64,17 @@ colorthemes("ma")
 #> 4    mako viridisLite sequential
 #> 5    Mako   grDevices sequential
 
-# Find color themes from a specific source
-colorthemes(source = "grDevices") |> head(5)
-#>         name    source      type
-#> 1   ArmyRose grDevices diverging
-#> 2     Berlin grDevices diverging
-#> 3   Blue-Red grDevices diverging
-#> 4 Blue-Red 2 grDevices diverging
-#> 5 Blue-Red 3 grDevices diverging
+# Find qualitative color themes from a specific source
+colorthemes(source = "RColorBrewer", type = "qualitative")
+#>      name       source        type
+#> 1  Accent RColorBrewer qualitative
+#> 2   Dark2 RColorBrewer qualitative
+#> 3  Paired RColorBrewer qualitative
+#> 4 Pastel1 RColorBrewer qualitative
+#> 5 Pastel2 RColorBrewer qualitative
+#> 6    Set1 RColorBrewer qualitative
+#> 7    Set2 RColorBrewer qualitative
+#> 8    Set3 RColorBrewer qualitative
 ```
 
 Once you find a theme,
@@ -143,7 +146,7 @@ plot(cars, col = map_to_colors(cars$speed, "Viridis_r"), pch = 19)
 plot(iris$Sepal.Length, iris$Sepal.Width,
      col = map_to_colors(iris$Species), pch = 19)
 plot(iris$Sepal.Length, iris$Sepal.Width,
-     col = map_to_colors(iris$Species, "Set 2"), pch = 19)
+     col = map_to_colors(iris$Species, "muted"), pch = 19)
 ```
 
 ![](reference/figures/README-plot_graphics-2.png)
@@ -164,7 +167,7 @@ library(ggplot2)
 # Qualitative scale
 ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
   geom_point(size = 3) +
-  scale_color_theme("Okabe-Ito_r")
+  scale_color_theme("Set2")
 ```
 
 ![](reference/figures/README-plot_ggplot2-1.png)
