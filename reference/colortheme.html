@@ -28,7 +28,8 @@ img {
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+      <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/colortheme.html">Get started</a></li>
+<li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/ryo-asashi/colortheme/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -162,11 +163,11 @@ It acts as a generic dispatcher that can retrieve a pre-defined theme by name, c
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p><code>colortheme()</code> returns a <code>"colortheme"</code> object containing <code>$palette()</code> and <code>$ramp()</code> functions along with theme metadata.</p>
+    <p><code>colortheme()</code> returns a <code>"colortheme"</code> object (an environment with class <code>c("colortheme", "environment")</code>) containing <code>$palette()</code> and <code>$ramp()</code> functions along with theme metadata.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>A <code>"colortheme"</code> object is a list-like structure that provides two primary color-generating functions: <code>$palette()</code> and <code>$ramp()</code>.</p>
+    <p>A <code>"colortheme"</code> object is a specialized environment that provides two primary color-generating functions: <code>$palette()</code> and <code>$ramp()</code>.</p>
 <p><code>$palette(n)</code> takes an integer <code>n</code> and returns a character vector of <code>n</code> discrete colors. It is primarily intended for qualitative themes, where distinct colors represent categorical data.</p>
 <p><code>$ramp(x)</code> takes a numeric vector <code>x</code> with values in the <code>[0, 1]</code> interval and returns a character vector of corresponding colors. It maps numeric values onto a continuous color gradient, making it suitable for sequential and diverging themes.</p>
 <p><code>colortheme()</code> dispatches based on the class of <code>object</code>:</p><ul><li><p>If <code>object</code> is a character string (e.g., <code>"Viridis"</code>, <code>"grDevices/RdBu_r@q?alpha=.5"</code>), it is parsed according to the theme name syntax and loaded from the registry.</p></li>
@@ -200,17 +201,17 @@ It acts as a generic dispatcher that can retrieve a pre-defined theme by name, c
 <span class="r-out co"><span class="r-pr">#&gt;</span> Kernel Class: palette</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Options:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  kernel.size      : Inf</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  reverse.method   : "kernel.args$rev &lt;- !kernel.args$rev"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  palette.formatter: "interpolate"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  palette.reverse  : FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  ramp.rescaler    : c(0, 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  na.color         : NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   kernel.size      : Inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   reverse.method   : "kernel.args$rev &lt;- !kernel.args$rev"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   palette.formatter: "interpolate"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   palette.reverse  : FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ramp.rescaler    : c(0, 1)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   na.color         : NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Kernel Arguments:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  palette: "Mako"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  alpha  : NULL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  rev    : FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   palette: "Mako"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   alpha  : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   rev    : FALSE</span>
 <span class="r-plt img"><img src="colortheme-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"</span>
@@ -228,8 +229,8 @@ It acts as a generic dispatcher that can retrieve a pre-defined theme by name, c
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Modify an existing theme</span></span></span>
-<span class="r-in"><span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu">colortheme</span><span class="op">(</span><span class="va">ct</span>, type <span class="op">=</span> <span class="st">"qualitative"</span>, reverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ct2</span> <span class="op">&lt;-</span> <span class="fu">colortheme</span><span class="op">(</span><span class="va">ct</span>, type <span class="op">=</span> <span class="st">"qualitative"</span>, reverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ct2</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#ffa600" "#ef5675" "#7a5195" "#003f5c" "#ffa600"</span>
 </code></pre></div>
     </div>

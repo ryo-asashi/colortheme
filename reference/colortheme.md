@@ -121,12 +121,13 @@ print(x, display = TRUE, ...)
 
 ## Value
 
-`colortheme()` returns a `"colortheme"` object containing `$palette()`
-and `$ramp()` functions along with theme metadata.
+`colortheme()` returns a `"colortheme"` object (an environment with
+class `c("colortheme", "environment")`) containing `$palette()` and
+`$ramp()` functions along with theme metadata.
 
 ## Details
 
-A `"colortheme"` object is a list-like structure that provides two
+A `"colortheme"` object is a specialized environment that provides two
 primary color-generating functions: `$palette()` and `$ramp()`.
 
 `$palette(n)` takes an integer `n` and returns a character vector of `n`
@@ -192,17 +193,17 @@ print(ct)
 #> Kernel Class: palette
 #> 
 #> Options:
-#>  kernel.size      : Inf
-#>  reverse.method   : "kernel.args$rev <- !kernel.args$rev"
-#>  palette.formatter: "interpolate"
-#>  palette.reverse  : FALSE
-#>  ramp.rescaler    : c(0, 1)
-#>  na.color         : NA
+#>   kernel.size      : Inf
+#>   reverse.method   : "kernel.args$rev <- !kernel.args$rev"
+#>   palette.formatter: "interpolate"
+#>   palette.reverse  : FALSE
+#>   ramp.rescaler    : c(0, 1)
+#>   na.color         : NA
 #> 
 #> Kernel Arguments:
-#>  palette: "Mako"
-#>  alpha  : NULL
-#>  rev    : FALSE
+#>   palette: "Mako"
+#>   alpha  : NULL
+#>   rev    : FALSE
 
 ct$palette(5L)
 #> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"
@@ -220,7 +221,7 @@ ct$palette(5L)
 #> [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"
 
 # Modify an existing theme
-ct <- colortheme(ct, type = "qualitative", reverse = TRUE)
-ct$palette(5L)
+ct2 <- colortheme(ct, type = "qualitative", reverse = TRUE)
+ct2$palette(5L)
 #> [1] "#ffa600" "#ef5675" "#7a5195" "#003f5c" "#ffa600"
 ```
