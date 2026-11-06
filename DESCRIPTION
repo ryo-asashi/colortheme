@@ -1,36 +1,23 @@
 Package: colortheme
 Type: Package
-Title: Unified Color Theme Management and Scales for R Graphics
+Title: A Unified Framework and Interface for Color Palettes and Ramps
 Version: 0.1.0
 Authors@R: c(
     person("Ryoichi", "Asashiba", email = "ryoichi.asashiba@gmail.com",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0001-9532-7000"))
   )
-Description: Provides a unified, lightweight interface for creating, modifying, 
-    and managing qualitative, sequential, and diverging color themes in R. 
-    Supports a compact URL-like query syntax for on-the-fly theme customization 
-    (such as reversing palettes, switching theme types, or adjusting transparency), 
-    lazy-loaded theme registries across multiple palette packages, direct value-to-color 
-    mapping for base R graphics, and seamless scale integration for 'ggplot2'.
+Description:
+  The 'colortheme' package provides a unified, environment-based object framework for managing, retrieving, and customizing color palettes and color ramps in R. It acts as a flexible dispatcher that supports both discrete qualitative palettes and continuous sequential/diverging color ramps. Features a compact URL-like syntax for on-the-fly theme modifications (such as color reversal, type coercion, and query-based parameter tuning) and seamless integration with base R graphics and 'ggplot2'.
 License: MIT + file LICENSE
 Encoding: UTF-8
+LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Depends: 
-    R (>= 4.1.0)
-Imports: 
-    graphics,
-    grDevices,
-    stats,
-    utils
-Suggests: 
-    ggplot2,
-    khroma,
-    RColorBrewer,
-    scales,
-    testthat (>= 3.0.0),
-    viridisLite
-Config/testthat/edition: 3
+Imports:
+  graphics, grDevices, stats, utils
+Suggests:
+  ggplot2, khroma, RColorBrewer, scales, testthat (>= 3.0.0), viridisLite
 URL: https://github.com/ryo-asashi/colortheme, https://ryo-asashi.github.io/colortheme/
 BugReports: https://github.com/ryo-asashi/colortheme/issues
+Config/testthat/edition: 3
 Config/Needs/website: rmarkdown
