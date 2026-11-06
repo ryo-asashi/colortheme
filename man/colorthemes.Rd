@@ -26,7 +26,7 @@ register_colortheme(
 
 \item{env}{an environment where color themes are registered. Defaults to the package registry (\code{getOption("colortheme.registry")}).}
 
-\item{kernel}{a color vector, a palette function, a ramp function, a \code{"colortheme"} object, or a length-2 character vector/list for lazy evaluation.}
+\item{kernel}{a color vector, a palette function, a ramp function, a \code{"colortheme"} object, or a length-2 character vector/list for lazy evaluation. If \code{NULL}, the theme is removed.}
 
 \item{kernel.args}{a list of arguments passed to the color kernel.}
 
@@ -53,7 +53,7 @@ To keep the registry lightweight, the \code{kernel} argument supports lazy loadi
 head(colorthemes())
 
 # Case-insensitive prefix matching
-head(colorthemes(name = "hc"))
+colorthemes(name = "ma")
 
 # Register a custom theme
 register_colortheme(

@@ -14,7 +14,7 @@
 #' @param source for \code{colorthemes()}, a character vector of sources to match (case-insensitive prefix matching). For \code{register_colortheme()}, a single string for the source name.
 #' @param type a character string or vector specifying the theme type(s): \code{"sequential"}, \code{"diverging"}, or \code{"qualitative"}.
 #' @param env an environment where color themes are registered. Defaults to the package registry (\code{getOption("colortheme.registry")}).
-#' @param kernel a color vector, a palette function, a ramp function, a \code{"colortheme"} object, or a length-2 character vector/list for lazy evaluation.
+#' @param kernel a color vector, a palette function, a ramp function, a \code{"colortheme"} object, or a length-2 character vector/list for lazy evaluation. If \code{NULL}, the theme is removed.
 #' @param kernel.args a list of arguments passed to the color kernel.
 #' @param options a list of option values controlling the color theme's behavior.
 #'
@@ -31,7 +31,7 @@
 #' head(colorthemes())
 #'
 #' # Case-insensitive prefix matching
-#' head(colorthemes(name = "hc"))
+#' colorthemes(name = "ma")
 #'
 #' # Register a custom theme
 #' register_colortheme(
