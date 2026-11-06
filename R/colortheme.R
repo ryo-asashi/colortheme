@@ -5,7 +5,7 @@
 #' It acts as a generic dispatcher that can retrieve a pre-defined theme by name, create a new theme from a vector of colors or a color-generating function, and modify an existing \code{"colortheme"} object.
 #'
 #' @details
-#' A \code{"colortheme"} object is a list-like structure that provides two primary color-generating functions: \code{$palette()} and \code{$ramp()}.
+#' A \code{"colortheme"} object is a specialized environment that provides two primary color-generating functions: \code{$palette()} and \code{$ramp()}.
 #'
 #' \code{$palette(n)} takes an integer \code{n} and returns a character vector of \code{n} discrete colors. It is primarily intended for qualitative themes, where distinct colors represent categorical data.
 #'
@@ -46,7 +46,7 @@
 #' @param ... optional named arguments used to modify the color theme (overriding corresponding entries in \code{options} or \code{kernel.args}).
 #'
 #' @returns
-#' \code{colortheme()} returns a \code{"colortheme"} object containing \code{$palette()} and \code{$ramp()} functions along with theme metadata.
+#' \code{colortheme()} returns a \code{"colortheme"} object (an environment with class \code{c("colortheme", "environment")}) containing \code{$palette()} and \code{$ramp()} functions along with theme metadata.
 #'
 #' @seealso \code{\link{colorthemes}}, \code{\link{register_colortheme}}, \code{\link{as_palette}}, \code{\link{map_to_colors}}, \code{\link{scale_color_theme}}
 #'
@@ -66,8 +66,8 @@
 #' ct$palette(5L)
 #'
 #' # Modify an existing theme
-#' ct <- colortheme(ct, type = "qualitative", reverse = TRUE)
-#' ct$palette(5L)
+#' ct2 <- colortheme(ct, type = "qualitative", reverse = TRUE)
+#' ct2$palette(5L)
 #' @export colortheme
 colortheme <- function(object, ...)
 UseMethod("colortheme")
@@ -80,10 +80,11 @@ colortheme.colortheme <- function(
     type = NULL, reverse = FALSE, ...
 ) {
   if (nargs() == 1L) return(object)
-  modify_theme(
+  theme <- modify_theme(
     theme = object, kernel.args = kernel.args, options = options,
     name = name, source = source, type = type, reverse = reverse, ...
   )
+  theme
 }
 
 
@@ -93,10 +94,13 @@ colortheme.character <- function(
     object, kernel.args = list(), options = list(), name = NULL, source = NULL,
     type = NULL, reverse = FALSE, env = NULL, ...
 ) {
-  if (length(object) > 1L || (length(object) == 1L && is_color(object) && !is_registered_theme(object, env))) {
+  if (
+    length(object) > 1L ||
+    (length(object) == 1L && is_color(object) && !is_registered_theme(object, env))
+  ) {
     theme <- make_theme(object, kernel.args, options, name, source, type)
     if (reverse || length(list(...)) > 0L) {
-      theme <- modify_theme(theme, reverse = reverse, ...)
+      theme <- modify_theme(theme, reverse = reverse, ..., inplace = TRUE)
     }
     return(theme)
   }
@@ -111,15 +115,16 @@ colortheme.character <- function(
   theme <- do.call(make_theme, reg_args)
   mod_args <- c(
     list(
-      theme = theme, kernel.args = kernel.args, options = options,
-      name = name, source = source, type = type, reverse = reverse
+      theme = theme, kernel.args = kernel.args, options = options, name = name,
+      source = source, type = type, reverse = reverse, inplace = TRUE
     ),
     list(...)
   )
   for (item in names(parsed$args)) {
     mod_args[[item]] <- parsed$args[[item]]
   }
-  do.call(modify_theme, mod_args)
+  theme <- do.call(modify_theme, mod_args)
+  theme
 }
 
 
@@ -145,6 +150,7 @@ colortheme.default <- function(
 }
 
 
+
 # global helpers
 
 `%||%` <- function(x, y) if (is.null(x)) y else x
@@ -152,6 +158,7 @@ colortheme.default <- function(
 is_discrete <- function(x) {
   is.factor(x) || is.character(x) || is.logical(x)
 }
+
 
 # local helpers
 
@@ -196,10 +203,10 @@ is_palette <- function(fun, n.test = 2L, args = list()) {
 }
 
 is_kernel <- function(object, args = list()) {
-  kernel_class(object, args = args) != "unknown"
+  get_kernel_class(object, args = args) != "unknown"
 }
 
-kernel_class <- function(object, args = list()) {
+get_kernel_class <- function(object, args = list()) {
   if (is_palette(object, args = args)) {
     "palette"
   } else if (is_ramp(object, args = args)) {
@@ -213,13 +220,13 @@ kernel_class <- function(object, args = list()) {
   }
 }
 
-kernel_size <- function(object, args = list(), kcl = NULL, ok = 1L, ng = 256L) {
-  kcl <- kcl %||% kernel_class(object, args = args)
-  if (kcl == "unknown")
+get_kernel_size <- function(object, args = list(), kernel.class = NULL, ok = 1L, ng = 256L) {
+  kernel.class <- kernel.class %||% get_kernel_class(object, args = args)
+  if (kernel.class == "unknown")
     stop("'object' must be a palette function, ramp function or color vector", call. = FALSE)
-  if (kcl == "ramp") return(Inf)
-  if (kcl == "null") return(0L)
-  if (kcl == "color") return(length(object))
+  if (kernel.class == "ramp") return(Inf)
+  if (kernel.class == "null") return(0L)
+  if (kernel.class == "color") return(length(object))
 
   init.ng <- ng
   while (abs(ok - ng) > 1L) {
@@ -268,6 +275,9 @@ colors_to_ramp <- function(colors) {
     res[!ng] <- do.call(grDevices::rgb, args)
     res
   }
+  environment(ramp) <- list2env(
+    list(.Ramp = .Ramp), parent = parent.env(environment())
+  )
   structure(ramp, class = c("function", "ramp"))
 }
 
@@ -286,34 +296,30 @@ get_theme <- function(name, source = NULL, env = colortheme_registry()) {
 }
 
 parse_theme_name <- function(name) {
-  args <- list()
-  source <- NULL
-  if (grepl("\\?", name)) {
-    query <- sub(".*\\?", "", name)
-    name <- sub("\\?.*", "", name)
-    pairs <- unlist(strsplit(query, "[;&]"))
-    pairs <- pairs[nzchar(pairs)]
-    for (p in pairs) {
-      kv <- unlist(strsplit(p, "=", fixed = TRUE))
-      if (length(kv) != 2L) stop("Invalid query parameter: ", p, call. = FALSE)
-      key <- trimws(kv[1L])
-      val <- trimws(kv[2L])
-      val <- gsub("^['\"]|['\"]$", "", val)
-      args[[key]] <- utils::type.convert(val, as.is = TRUE)
-    }
-  }
-  if (grepl("@", name)) {
-    suf <- sub(".*@", "", name)
-    name <- sub("@.*", "", name)
-    args$type <- suf
-  }
-  if (grepl("_r$", name)) {
-    name <- sub("_r$", "", name)
-    args$reverse <- TRUE
-  }
+  # prefix: shortcut for source --------
   if (grepl("/", name)) {
     source <- sub("/.*", "", name)
     name <- sub(".*/", "", name)
+  } else {
+    source <- NULL
+  }
+  # suffix: query --------
+  query_env <- new.env(parent = baseenv())
+  if (grepl("\\?", name)) {
+    query <- unlist(strsplit(sub(".*\\?", "", name), "&", fixed = TRUE))
+    eval(str2expression(query), envir = query_env, enclos = baseenv())
+    name <- sub("\\?.*", "", name)
+  }
+  args <- as.list(query_env)
+  # suffix: shortcuts for type --------
+  if (grepl("@", name)) {
+    args$type <- sub(".*@", "", name)
+    name <- sub("@.*", "", name)
+  }
+  # suffix: shortcut for reverse --------
+  if (grepl("_r$", name)) {
+    args$reverse <- TRUE
+    name <- sub("_r$", "", name)
   }
   list(name = name, source = source, args = args)
 }
@@ -335,48 +341,46 @@ make_theme <- function(
   if (!is.null(source) && (!is.character(source) || length(source) != 1L))
     stop("'source' must be a character string or NULL", call. = FALSE)
   type <- match.arg(type, c("sequential", "diverging", "qualitative"))
-  kcl <- kernel_class(kernel, args = kernel.args)
-  if (kcl == "color") {
+  kernel.class <- get_kernel_class(kernel, args = kernel.args)
+  if (kernel.class == "color") {
     kernel.args$mode <- kernel.args$mode %||%
       switch(type, qualitative = "palette", "ramp")
     kernel.args$alpha <- kernel.args$alpha %||% NA
   }
   options$kernel.size <- options$kernel.size %||%
-    kernel_size(kernel, args = kernel.args, kcl = kcl)
+    get_kernel_size(kernel, args = kernel.args, kernel.class = kernel.class)
   options$palette.formatter <- options$palette.formatter %||%
     switch(type, qualitative = "recycle", "interpolate")
   options$palette.reverse <- options$palette.reverse %||% FALSE
   options$ramp.rescaler <- options$ramp.rescaler %||% c(0, 1)
   options$na.color <- options$na.color %||% NA
   options$reverse.method <- options$reverse.method %||% NA
-  theme <- list(
-    kernel = kernel,
-    kernel.class = kcl,
-    kernel.args = kernel.args,
-    options = options,
-    name = name,
-    source = source,
-    type = type
-  )
-  compile_theme(theme)
-}
 
-compile_theme <- function(theme) {
-  kernel <- theme$kernel
-  kcl <- theme$kernel.class
-  kernel.args <- theme$kernel.args
-  options <- theme$options
-  theme$palette <- function(n) {
+  env <- list2env(
+    list(
+      kernel = kernel,
+      kernel.class = kernel.class,
+      kernel.args = kernel.args,
+      options = options,
+      name = name,
+      source = source,
+      type = type
+    ),
+    parent = parent.env(environment())
+  )
+
+  # palette --------
+  env$palette <- function(n) {
     if (!is.numeric(n) || length(n) != 1L)
       stop("'n' must be an integer", call. = FALSE)
     if ((n <- as.integer(n)) <= 0L)
       return(character(0L))
     nks <- min(n, options$kernel.size)
-    if (kcl == "palette") {
+    if (kernel.class == "palette") {
       ret <- do.call(kernel, c(list(n = nks), kernel.args))
-    } else if (kcl == "ramp") {
+    } else if (kernel.class == "ramp") {
       ret <- do.call(kernel, c(list(x = seq.int(0, 1, length.out = n)), kernel.args))
-    } else if (kcl == "color") {
+    } else if (kernel.class == "color") {
       cols <- kernel
       if (!is.null(kernel.args$alpha) && !is.na(kernel.args$alpha))
         cols <- grDevices::adjustcolor(cols, alpha.f = kernel.args$alpha)
@@ -403,9 +407,12 @@ compile_theme <- function(theme) {
       }
     }
     ret[is.na(ret)] <- options$na.color
-    ret
+    unname(ret)
   }
-  theme$ramp <- function(x) {
+  environment(env$palette) <- env
+
+  # ramp --------
+  env$ramp <- function(x) {
     if (!is.numeric(x))
       stop("'x' must be a numeric vector", call. = FALSE)
     eps <- .Machine$double.eps
@@ -422,12 +429,12 @@ compile_theme <- function(theme) {
       stop("'ramp.rescaler' option must be a numeric vector of length 2", call. = FALSE)
     x_ok <- x_ok * diff(rsc) + rsc[1L]
     mks <- min(256L, options$kernel.size)
-    if (kcl == "palette") {
+    if (kernel.class == "palette") {
       cols <- do.call(kernel, c(list(n = mks), kernel.args))
       ret[!ng] <- colors_to_ramp(cols)(x_ok)
-    } else if (kcl == "ramp") {
+    } else if (kernel.class == "ramp") {
       ret[!ng] <- do.call(kernel, c(list(x = x_ok), kernel.args))
-    } else if (kcl == "color") {
+    } else if (kernel.class == "color") {
       cols <- kernel
       if (!is.null(kernel.args$alpha) && !is.na(kernel.args$alpha))
         cols <- grDevices::adjustcolor(cols, alpha.f = kernel.args$alpha)
@@ -438,13 +445,25 @@ compile_theme <- function(theme) {
     ret[is.na(ret)] <- options$na.color
     ret
   }
-  structure(theme, class = "colortheme")
+  environment(env$ramp) <- env
+
+  structure(env, class = c("colortheme", "environment"))
+}
+
+clone_theme <- function(theme) {
+  env <- list2env(as.list(theme, all.names = TRUE), parent = parent.env(theme))
+  environment(env$palette) <- env
+  environment(env$ramp) <- env
+  structure(env, class = class(theme))
 }
 
 modify_theme <- function(
-    theme, kernel.args = NULL, options = NULL,
-    name = NULL, source = NULL, type = NULL, reverse = FALSE, ...
+    theme, kernel.args = NULL, options = NULL, name = NULL,
+    source = NULL, type = NULL, reverse = FALSE, ..., inplace = FALSE
 ) {
+  if (!inplace) {
+    theme <- clone_theme(theme)
+  }
   if (!is_colortheme(theme))
     stop("'theme' must be a 'colortheme' object", call. = FALSE)
   if (!is.null(name))
@@ -491,9 +510,7 @@ modify_theme <- function(
   if (isTRUE(reverse)) {
     method <- theme$options$reverse.method
     if (!is.null(method) && !is.na(method)) {
-      tmp_env <- list2env(theme, parent = baseenv())
-      eval(str2expression(method), envir = tmp_env)
-      for (nm in names(theme)) theme[[nm]] <- tmp_env[[nm]]
+      eval(str2expression(method), envir = theme, enclos = baseenv())
     } else if (theme$kernel.class == "color") {
       theme$kernel <- rev(theme$kernel)
     } else {
@@ -501,30 +518,14 @@ modify_theme <- function(
       theme$options$ramp.rescaler <- rev(theme$options$ramp.rescaler)
     }
   }
-  compile_theme(theme)
+  if (length(kernel.args) > 0L || length(dots) > 0L) {
+    theme$kernel.class <- get_kernel_class(theme$kernel, args = theme$kernel.args)
+  }
+  theme
 }
 
 
 # S3 methods
-
-#' @export
-`$<-.colortheme` <- function(x, name, value) {
-  x <- NextMethod()
-  if (!name %in% c("palette", "ramp")) {
-    x <- compile_theme(x)
-  }
-  x
-}
-
-#' @export
-`[[<-.colortheme` <- function(x, i, value) {
-  x <- NextMethod()
-  if (is.character(i) && !all(i %in% c("palette", "ramp"))) {
-    x <- compile_theme(x)
-  }
-  x
-}
-
 
 #' @rdname colortheme
 #' @exportS3Method base::plot
@@ -562,7 +563,7 @@ print.colortheme <- function(x, display = TRUE, ...) {
   cat("Kernel Class: ", x$kernel.class, "\n", sep = "")
   if (length(x$options) > 0L) {
     cat("\nOptions:\n")
-    nms <- format(paste0(" ", names(x$options)), justify = "left")
+    nms <- format(paste0("  ", names(x$options)), justify = "left")
     vals <- vapply(x$options, function(v) {
       if (is.function(v)) "<function>" else deparse1(v)
     }, character(1L))
@@ -570,7 +571,7 @@ print.colortheme <- function(x, display = TRUE, ...) {
   }
   if (length(x$kernel.args) > 0L) {
     cat("\nKernel Arguments:\n")
-    nms <- format(paste0(" ", names(x$kernel.args)), justify = "left")
+    nms <- format(paste0("  ", names(x$kernel.args)), justify = "left")
     vals <- vapply(x$kernel.args, function(v) {
       if (is.function(v)) "<function>" else deparse1(v)
     }, character(1L))

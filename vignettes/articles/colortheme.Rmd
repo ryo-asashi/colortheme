@@ -1,0 +1,252 @@
+---
+title: "Getting Started with Color Themes"
+description: >
+  Provides an introduction to the colortheme package and a gallery of pre-defined color themes.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with Color Themes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.height = 2.2,
+  fig.width = 6
+)
+
+pkgs <- c("khroma", "viridisLite", "RColorBrewer", "gridExtra", "ggplot2", "DT", "htmltools")
+to_install <- pkgs[!pkgs %in% rownames(installed.packages())]
+if (length(to_install) > 0L) install.packages(to_install)
+
+show_colors_html <- function(colors, height = "25px") {
+  div_tags <- lapply(colors, function(color) {
+    htmltools::tags$div(
+      style = paste("background-color:", color, ";",
+                    "width: 100%; height:", height, ";",
+                    "display: inline-block;")
+    )
+  })
+  htmltools::tagList(htmltools::tags$div(
+      style = "display: flex; width: 100%;", div_tags
+  ))
+}
+```
+
+# Color themes
+
+The `"colortheme"` object provides two color-generating functions: `palette()` and `ramp()`. The `palette()` function accepts an integer $n$ and returns a vector of $n$ discrete colors. It is primarily intended for **qualitative** themes, where distinct colors are used to represent categorical data. The `ramp()` function accepts a numeric vector $x$ with values in the $[0, 1]$ interval and returns a vector of corresponding colors. It maps numeric values onto a continuous color gradient, making it suitable for **sequential** and **diverging** themes.
+
+## Pre-defined themes
+
+You can get a pre-defined `"colortheme"` object by providing a theme name to the `colortheme()` function.
+
+```{r, fig.height = 1.2, fig.width = 6, warning = FALSE}
+library(colortheme)
+# diverging color theme "azurerose" (package:colortheme)
+azurerose <- colortheme("azurerose")
+print(azurerose)
+```
+
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+azurerose$palette(5)
+show_colors_html(azurerose$palette(5))
+azurerose$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00))
+show_colors_html(azurerose$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00)))
+```
+
+```{r, fig.height = 1.2, fig.width = 6}
+# sequential color theme "viridis" (package:viridisLite)
+viridis <- colortheme("viridis")
+print(viridis)
+```
+
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+viridis$palette(5)
+show_colors_html(viridis$palette(5))
+viridis$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00))
+show_colors_html(viridis$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00)))
+```
+
+You can modify themes by **reversing** the color order or **changing** the theme type (e.g., from sequential to qualitative). These changes can be applied in two ways:
+
+1. **Using Arguments** : provide the appropriate argument to the function, such as `reverse = TRUE` or `type = "qualitative"`.
+2. **Using Suffixes** : for convenience, you can append a suffix directly to the theme's name. `_r` to reverse the theme, `@q` (or longer, such as `@qual`) to make the theme qualitative (`@d` for diverging, `@s` for sequential).
+
+```{r, fig.height = 1.2, fig.width = 6}
+plot(colortheme("nightfall", reverse = TRUE),
+     text = "khroma/nightfall_r")
+plot(colortheme("nightfall", type = "qualitative"),
+     text = "khroma/nightfall@qual")
+plot(colortheme("viridis_r"),
+     text = "viridisLite/viridis_r")
+plot(colortheme("viridis@qual", kernel.size = 8L),
+     text = "viridisLite/viridis@qual")
+```
+
+You can also customize kernel arguments on the fly using query parameters after `?` (e.g., `"highlight?which=1:2"`).
+
+When multiple packages provide a theme with the same name (e.g., `"Paired"`), you can specify which one to use in two ways:
+
+1. **Using Argument** : provide the package name to the `source` argument (e.g., `source = "grDevices"`).
+2. **Using Prefix** : prepend the package name and a forward slash to the theme name (e.g., `"RColorBrewer/Paired"`).
+
+```{r, fig.height = 1.2, fig.width = 6}
+# qualitative color theme "Paired" (package:grDevices)
+paired <- colortheme("Paired", source = "grDevices")
+plot(paired, text = "grDevices/Paired")
+# qualitative color theme "Paired" (package:RColorBrewer)
+paired2 <- colortheme("RColorBrewer/Paired")
+plot(paired2, text = "RColorBrewer/Paired")
+```
+
+## Custom themes
+
+Alternatively, you can create a new `"colortheme"` object by passing a custom color vector or function to the first argument of `colortheme()`.
+
+```{r, fig.height = 1.2, fig.width = 6}
+# create a new color theme using a color vector
+mytheme <- colortheme(
+  c("#003f5c", "#7a5195", "#ef5675", "#ffa600"),
+  type = "sequential", name = "mytheme"
+)
+print(mytheme)
+```
+
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+mytheme$palette(5)
+show_colors_html(mytheme$palette(5))
+mytheme$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00))
+show_colors_html(mytheme$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00)))
+```
+
+```{r, fig.height = 1.2, fig.width = 6}
+# create a new color theme using a color function
+rainbow <- colortheme(
+  grDevices::rainbow,
+  name = "rainbow", source = "grDevices"
+)
+print(rainbow)
+```
+
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+rainbow$palette(5)
+show_colors_html(rainbow$palette(5))
+rainbow$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00))
+show_colors_html(rainbow$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00)))
+```
+
+You can register a custom theme to call it by name later in your current R session. To do so, use the `register_colortheme()` function.
+
+```{r, fig.height = 1.2, fig.width = 6}
+register_colortheme(mytheme, name = "mytheme", source = "custom")
+colortheme("mytheme_r@div")
+colortheme("custom/mytheme@q")
+```
+
+## Using themes with **ggplot2**
+
+To apply your color themes to **ggplot2** plots, use the `scale_color_theme()` and `scale_fill_theme()` functions. These scales integrate your themes directly into the plot's `color` and `fill` aesthetics.
+
+```{r, fig.width = 6, fig.height = 4, warning = FALSE}
+library(ggplot2)
+library(gridExtra)
+theme_set(theme_minimal())
+
+set.seed(42)
+dataset <- diamonds[sample(nrow(diamonds), 5000L), ]
+
+p <- ggplot(dataset) + geom_point(aes(carat, price, col = color), alpha = 0.8)
+grid.arrange(
+  p + scale_color_theme("shiki"),
+  p + scale_color_theme("viridisLite/mako?alpha=.5", discrete = TRUE),
+  p + scale_color_theme("tokyo@qual"),
+  p + scale_color_theme("highlight?base='#50505010'&which=6:7")
+)
+```
+
+```{r, fig.width = 6, fig.height = 4, warning = FALSE}
+p2 <- ggplot(dataset) +
+  geom_histogram(aes(x = carat, fill = cut), bins = 20)
+grid.arrange(
+  p2 + scale_fill_theme("ukiyoe"),
+  p2 + scale_fill_theme("khroma/discreterainbow"),
+  p2 + scale_fill_theme("mytheme@q"),
+  p2 + scale_fill_theme("highlight?which=1:2")
+)
+```
+
+```{r, fig.width = 6, fig.height = 4, warning = FALSE}
+# Continuous scales with sequential and diverging themes
+p3 <- ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_raster()
+grid.arrange(
+  p3 + scale_fill_theme("ai"),
+  p3 + scale_fill_theme("Cividis", middle = 0.017),
+  p3 + scale_fill_theme("ai_r"),
+  p3 + scale_fill_theme("Viridis?alpha=0.5")
+)
+```
+
+```{r, echo = FALSE}
+remove("mytheme", envir = getOption("colortheme.registry"))
+.df <- colorthemes()
+```
+
+# Pre-defined color themes
+
+The following color themes are available when the **colortheme** package is loaded. Some themes depend on other packages being installed, so for full functionality, please ensure you have already installed the **viridisLite**, **RColorBrewer**, and **khroma** packages.
+
+```{r table, echo = FALSE}
+DT::datatable(
+  .df,
+  class = 'cell-border stripe hover',
+  rownames = FALSE,
+  options = list(
+    pageLength = 10,
+    lengthMenu = c(10, 20, 50, 100),
+    dom = 'Btip'
+  )
+)
+```
+
+## Diverging Color Themes
+
+```{r diverging_gallery, echo = FALSE}
+op <- par(mfrow = c(2, 2), mar = c(1, 1, 2, 1))
+df <- .df[.df$type == "diverging", ]
+for (i in seq_len(nrow(df))) {
+  ct <- colortheme(df[i, 1L], source = df[i, 2L])
+  text <- sprintf("%s/%s", df[i, 2L], df[i, 1L])
+  plot(ct, text = text)
+}
+par(op)
+```
+
+## Qualitative Color Themes
+
+```{r qualitative_gallery, echo = FALSE}
+op <- par(mfrow = c(2, 2), mar = c(1, 1, 2, 1))
+df <- .df[.df$type == "qualitative", ]
+for (i in seq_len(nrow(df))) {
+  ct <- colortheme(df[i, 1L], source = df[i, 2L])
+  text <- sprintf("%s/%s", df[i, 2L], df[i, 1L])
+  plot(ct, text = text)
+}
+par(op)
+```
+
+## Sequential Color Themes
+
+```{r sequential_gallery, echo = FALSE}
+op <- par(mfrow = c(2, 2), mar = c(1, 1, 2, 1))
+df <- .df[.df$type == "sequential", ]
+for (i in seq_len(nrow(df))) {
+  ct <- colortheme(df[i, 1L], source = df[i, 2L])
+  text <- sprintf("%s/%s", df[i, 2L], df[i, 1L])
+  plot(ct, text = text)
+}
+par(op)
+```

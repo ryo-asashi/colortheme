@@ -77,14 +77,14 @@ colortheme(object, ...)
 \item{display}{logical. If \code{TRUE} (default), \code{print()} also plots the color swatch.}
 }
 \value{
-\code{colortheme()} returns a \code{"colortheme"} object containing \code{$palette()} and \code{$ramp()} functions along with theme metadata.
+\code{colortheme()} returns a \code{"colortheme"} object (an environment with class \code{c("colortheme", "environment")}) containing \code{$palette()} and \code{$ramp()} functions along with theme metadata.
 }
 \description{
 The \code{colortheme()} function is the main interface for working with \code{"colortheme"} objects.
 It acts as a generic dispatcher that can retrieve a pre-defined theme by name, create a new theme from a vector of colors or a color-generating function, and modify an existing \code{"colortheme"} object.
 }
 \details{
-A \code{"colortheme"} object is a list-like structure that provides two primary color-generating functions: \code{$palette()} and \code{$ramp()}.
+A \code{"colortheme"} object is a specialized environment that provides two primary color-generating functions: \code{$palette()} and \code{$ramp()}.
 
 \code{$palette(n)} takes an integer \code{n} and returns a character vector of \code{n} discrete colors. It is primarily intended for qualitative themes, where distinct colors represent categorical data.
 
@@ -128,8 +128,8 @@ ct <- colortheme(c("#003f5c", "#7a5195", "#ef5675", "#ffa600"))
 ct$palette(5L)
 
 # Modify an existing theme
-ct <- colortheme(ct, type = "qualitative", reverse = TRUE)
-ct$palette(5L)
+ct2 <- colortheme(ct, type = "qualitative", reverse = TRUE)
+ct2$palette(5L)
 }
 \seealso{
 \code{\link{colorthemes}}, \code{\link{register_colortheme}}, \code{\link{as_palette}}, \code{\link{map_to_colors}}, \code{\link{scale_color_theme}}
