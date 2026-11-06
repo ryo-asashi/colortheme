@@ -10,12 +10,12 @@
 Source:
 [`DESCRIPTION`](https://github.com/ryo-asashi/colortheme/blob/main/DESCRIPTION)
 
-Asashiba R (2026). *colortheme: Unified Color Theme Management and
-Scales for R Graphics*. R package version 0.1.0,
+Asashiba R (2026). *colortheme: A Unified Framework and Interface for
+Color Palettes and Ramps*. R package version 0.1.0,
 <https://github.com/ryo-asashi/colortheme>.
 
     @Manual{,
-      title = {colortheme: Unified Color Theme Management and Scales for R Graphics},
+      title = {colortheme: A Unified Framework and Interface for Color Palettes and Ramps},
       author = {Ryoichi Asashiba},
       year = {2026},
       note = {R package version 0.1.0},
