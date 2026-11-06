@@ -316,12 +316,12 @@ theme_set(theme_minimal())
 set.seed(42)
 dataset <- diamonds[sample(nrow(diamonds), 5000L), ]
 
-p <- ggplot(dataset) + geom_point(aes(carat, price, col = color), alpha = 0.8)
+p <- ggplot(dataset) + geom_point(aes(carat, price, col = color))
 grid.arrange(
   p + scale_color_theme("shiki"),
-  p + scale_color_theme("viridisLite/mako?alpha=.5", discrete = TRUE),
+  p + scale_color_theme("viridisLite/mako", discrete = TRUE),
   p + scale_color_theme("tokyo@qual"),
-  p + scale_color_theme("highlight?base='#50505010'&which=6:7")
+  p + scale_color_theme("highlight?base='#80808010'&which=6:7")
 )
 ```
 
