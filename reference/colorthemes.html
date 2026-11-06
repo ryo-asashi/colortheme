@@ -92,7 +92,7 @@ img {
 
 
 <dt id="arg-kernel">kernel<a class="anchor" aria-label="anchor" href="#arg-kernel"></a></dt>
-<dd><p>a color vector, a palette function, a ramp function, a <code>"colortheme"</code> object, or a length-2 character vector/list for lazy evaluation.</p></dd>
+<dd><p>a color vector, a palette function, a ramp function, a <code>"colortheme"</code> object, or a length-2 character vector/list for lazy evaluation. If <code>NULL</code>, the theme is removed.</p></dd>
 
 
 <dt id="arg-kernel-args">kernel.args<a class="anchor" aria-label="anchor" href="#arg-kernel-args"></a></dt>
@@ -133,9 +133,13 @@ To keep the registry lightweight, the <code>kernel</code> argument supports lazy
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6 Blue-Yellow 2 grDevices diverging</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case-insensitive prefix matching</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">colorthemes</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"hc"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   name     source        type</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  hcl colortheme qualitative</span>
+<span class="r-in"><span><span class="fu">colorthemes</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"ma"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      name      source       type</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 managua      khroma  diverging</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Magenta   grDevices sequential</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    Mako   grDevices sequential</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   magma viridisLite sequential</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    mako viridisLite sequential</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Register a custom theme</span></span></span>
 <span class="r-in"><span><span class="fu">register_colortheme</span><span class="op">(</span></span></span>

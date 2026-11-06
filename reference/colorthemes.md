@@ -47,7 +47,8 @@ register_colortheme(
 - kernel:
 
   a color vector, a palette function, a ramp function, a `"colortheme"`
-  object, or a length-2 character vector/list for lazy evaluation.
+  object, or a length-2 character vector/list for lazy evaluation. If
+  `NULL`, the theme is removed.
 
 - kernel.args:
 
@@ -97,9 +98,13 @@ head(colorthemes())
 #> 6 Blue-Yellow 2 grDevices diverging
 
 # Case-insensitive prefix matching
-head(colorthemes(name = "hc"))
-#>   name     source        type
-#> 1  hcl colortheme qualitative
+colorthemes(name = "ma")
+#>      name      source       type
+#> 1 managua      khroma  diverging
+#> 2 Magenta   grDevices sequential
+#> 3    Mako   grDevices sequential
+#> 4   magma viridisLite sequential
+#> 5    mako viridisLite sequential
 
 # Register a custom theme
 register_colortheme(
