@@ -39,6 +39,9 @@
 #'   name = "sand", source = "custom", type = "sequential"
 #' )
 #' colorthemes(name = "sand")
+#'
+#' # Remove the custom theme by passing NULL
+#' register_colortheme(NULL, name = "sand", source = "custom")
 #' @name colorthemes
 NULL
 
@@ -53,15 +56,15 @@ colortheme_registry <- function() {
 }
 
 
-colortheme_defaults <- function(
+colortheme_default <- function(
     type = c("sequential", "diverging", "qualitative"), use.options = TRUE
 ) {
   type <- match.arg(type)
-  fallback <- switch(
-    type, sequential = "bluescale", diverging = "RdBu", qualitative = "HCL"
+  package_default <- switch(
+    type, sequential = "bluescale", diverging = "azurerose", qualitative = "hcl"
   )
-  if (!use.options) return(fallback)
-  getOption(paste0("colortheme.", type), default = fallback)
+  if (!use.options) return(package_default)
+  getOption(paste0("colortheme.", type), default = package_default)
 }
 
 
@@ -136,6 +139,12 @@ register_colortheme <- function(
     source = "custom", type = NULL, env = NULL
 ) {
   env <- env %||% colortheme_registry()
+  if (is.null(kernel)) {
+    old <- env[[name]][[source]]
+    env[[name]][[source]] <- NULL
+    if (length(env[[name]]) == 0L) remove(list = name, envir = env)
+    return(invisible(old))
+  }
   if (is_colortheme(kernel)) {
     args <- as.list(kernel)[c("kernel", "kernel.args", "options", "type")]
     args$name <- name %||% kernel$name
@@ -168,14 +177,14 @@ register_colortheme <- function(
 # internal helpers
 
 init_colortheme <- function(
-    pkgname = "colortheme", overwrite.options = FALSE,
-    env = colortheme_registry(), clear.env = FALSE
+    overwrite.options = FALSE, env = NULL, clear.env = FALSE
 ) {
-  set_colortheme_options(overwrite = overwrite.options)
+  set_colortheme_options(overwrite = overwrite.options, env = env)
+  env <- env %||% colortheme_registry()
   if (isTRUE(clear.env)) {
     rm(list = ls(envir = env, all.names = TRUE), envir = env)
   }
-  register_themes_builtin(env = env, pkgname = pkgname)
+  register_themes_colortheme(env = env)
   register_themes_grDevices(env = env)
   register_themes_viridisLite(env = env)
   register_themes_RColorBrewer(env = env)
@@ -184,12 +193,12 @@ init_colortheme <- function(
 }
 
 
-set_colortheme_options <- function(overwrite = FALSE) {
+set_colortheme_options <- function(overwrite = FALSE, env = NULL) {
   ops <- list(
-    colortheme.registry    = colortheme_env,
-    colortheme.sequential  = colortheme_defaults("sequential", use.options = FALSE),
-    colortheme.diverging   = colortheme_defaults("diverging", use.options = FALSE),
-    colortheme.qualitative = colortheme_defaults("qualitative", use.options = FALSE)
+    colortheme.registry    = env %||% colortheme_env,
+    colortheme.sequential  = colortheme_default("sequential", use.options = FALSE),
+    colortheme.diverging   = colortheme_default("diverging", use.options = FALSE),
+    colortheme.qualitative = colortheme_default("qualitative", use.options = FALSE)
   )
   if (!overwrite) {
     toset <- !(names(ops) %in% names(options()))
@@ -200,47 +209,101 @@ set_colortheme_options <- function(overwrite = FALSE) {
 }
 
 
-register_themes_builtin <- function(env = colortheme_registry(), pkgname = "colortheme") {
+register_themes_colortheme <- function(env = colortheme_registry()) {
+
   register_colortheme(
-    name = "midr", source = pkgname, type = "diverging", env = env,
-    kernel = c("#005AAD", "#688BC0", "#A8B8D6", "#D7DCE7", "#F1F1F1", "#E9D8DF",
-               "#D9ABBF", "#C27098", "#A4136E"),
-    kernel.args = list(mode = "ramp")
+    name = "hcl", source = "colortheme", type = "qualitative", env = env,
+    kernel = c(
+      text = paste0(
+        "function(n, direction, alpha, chroma, luminance, offset) {",
+        "  if (n <= 0L) return(character(0L));",
+        "  hues <- seq(offset, offset + 360 * (1 - 1 / n) * sign(direction), length.out = n) %% 360;",
+        "  hcl(h = hues, c = chroma, l = luminance, alpha = alpha)",
+        "}"
+      ),
+      namespace = "grDevices"
+    ),
+    kernel.args = list(
+      direction = 1L, alpha = NULL, chroma = 100, luminance = 65, offset = 15
+    ),
+    options = list(
+      kernel.size = Inf,
+      reverse.method = "kernel.args$direction <- - kernel.args$direction"
+    )
   )
   register_colortheme(
-    name = "bluescale", source = pkgname, type = "sequential", env = env,
+    name = "bicolor", source = "colortheme", type = "diverging", env = env,
+    kernel = c(text = "function(x, first, second) ifelse(x <= 0.5, first, second)",
+               namespace = "base"),
+    kernel.args = list(first = "#2B5C8F", second = "#D64550")
+  )
+  register_colortheme(
+    name = "highlight", source = "colortheme", type = "qualitative", env = env,
+    kernel = c(text = paste0("function(n, accent, base, which = 1L) {",
+                             "x <- rep_len(base, n);",
+                             "x[which] <- rep_len(accent, length(which));",
+                             "x[seq_len(n)]}"), namespace = "base"),
+    kernel.args = list(
+      accent = c("#D64550", "#2B5C8F"), base = "#BFBFBF", which = 1L
+    )
+  )
+  register_colortheme(
+    name = "bluescale", source = "colortheme", type = "sequential", env = env,
     kernel = c("#132B43", "#56B1F7"),
     kernel.args = list(mode = "ramp")
   )
   register_colortheme(
-    name = "grayscale", source = pkgname, type = "sequential", env = env,
+    name = "grayscale", source = "colortheme", type = "sequential", env = env,
     kernel = c("#FEFEFE", "#0F0F0F"),
     kernel.args = list(mode = "ramp")
   )
   register_colortheme(
-    name = "shap", source = pkgname, type = "sequential", env = env,
-    kernel = c("#2C87E1", "#2A6BE9", "#774DCF", "#9C30BB", "#C60099", "#E7007E",
-               "#F72A5A"),
+    name = "neon", source = "colortheme", type = "sequential", env = env,
+    kernel = c(
+      "#1E56C6", "#4B52D4", "#7B49D6", "#A63EC9", "#CD2FB2", "#EA2A91", "#FF3B6B"
+    ),
     kernel.args = list(mode = "ramp")
   )
   register_colortheme(
-    name = "HCL", source = pkgname, type = "qualitative", env = env,
-    kernel = c(text = "hcl_palette", namespace = pkgname),
-    kernel.args = list(direction = 1L, alpha = NULL, chroma = 100, luminance = 65)
+    name = "azurerose", source = "colortheme", type = "diverging", env = env,
+    kernel = c(
+      "#005AAD", "#3B78C2", "#729BD6", "#AFC4E8", "#F7F7F7", "#E8B3CC", "#D67FA8", "#BD4989", "#A4136E"
+    ),
+    kernel.args = list(mode = "ramp")
+  )
+
+  # washoku
+  register_colortheme(
+    name = "ukiyoe", source = "colortheme", type = "qualitative", env = env,
+    kernel = c(
+      aitetsu = "#1D3557", bengara = "#C85A32", yamabuki = "#E09F3E",
+      aotake = "#2A9D8F", edomurasaki = "#6D597A", rikyunezumi = "#8D99AE"
+    ),
+    kernel.args = list(mode = "palette")
   )
   register_colortheme(
-    name = "bicolor", source = pkgname, type = "diverging", env = env,
-    kernel = c(text = "function(x, first, second) ifelse(x <= 0.5, first, second)",
-               namespace = "base"),
-    kernel.args = list(first = "steelblue", second = "maroon")
+    name = "kasane", source = "colortheme", type = "diverging", env = env,
+    kernel = c(
+      konjo = "#1A365D", hanada = "#3B6998", byakugun = "#84A9C0", kinari = "#F4F4F0",
+      ikkonzome = "#E8A598", sohi = "#D16654", kokihi = "#9E2A2B"
+    ),
+    kernel.args = list(mode = "ramp")
   )
   register_colortheme(
-    name = "highlight", source = pkgname, type = "qualitative", env = env,
-    kernel = c(text = paste0("function(n, accent, base, which = 1L) {",
-                             "x <- rep.int(base, n);",
-                             "x[which] <- rep_len(accent, length(which));",
-                             "x[seq_len(n)]}"), namespace = "base"),
-    kernel.args = list(accent = "#A4136E", base = "gray80", which = 1L)
+    name = "ai", source = "colortheme", type = "sequential", env = env,
+    kernel = c(
+      kamenozoki = "#E6F2F2", mizuasagi = "#A8D5BA", asagi = "#56A3A6",
+      nando = "#2B728E", ai = "#1D4E6E", kachigaeshi = "#0D2538"
+    ),
+    kernel.args = list(mode = "ramp")
+  )
+  register_colortheme(
+    name = "shiki", source = "colortheme", type = "qualitative", env = env,
+    kernel = c(
+      koubai = "#B8336A", usubeni = "#E58FB1", tokiwa = "#2D6A4F", wakatake = "#74C69D",
+      kohaku = "#B5651D", kariyasu = "#E9C46A", tetsukon = "#264653", hisoku = "#8AB17D"
+    ),
+    kernel.args = list(mode = "palette")
   )
   invisible(NULL)
 }
@@ -311,8 +374,9 @@ register_themes_RColorBrewer <- function(env = colortheme_registry()) {
   info <- RColorBrewer::brewer.pal.info
   for (i in seq_len(nrow(info))) {
     x <- rownames(info)[i]
+    type <- as.character(info[i, 2L])
     register_colortheme(
-      name = x, source = "RColorBrewer", type = info[i, 2L], env = env,
+      name = x, source = "RColorBrewer", type = type, env = env,
       kernel = c(
         text = sprintf("brewer.pal(n = %d, name = '%s')", info[i, 1L], x),
         namespace = "RColorBrewer"
@@ -327,6 +391,9 @@ register_themes_khroma <- function(env = colortheme_registry()) {
   if (!requireNamespace("khroma", quietly = TRUE)) return(invisible(NULL))
 
   info <- khroma::info()
+  info <- info[
+    info$type %in% c("sequential", "diverging", "qualitative"), , drop = FALSE
+  ]
   for (i in seq_len(nrow(info))) {
     x <- info[i, 1L]
     register_colortheme(

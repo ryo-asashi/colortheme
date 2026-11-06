@@ -24,7 +24,7 @@
 #' @export map_to_colors
 map_to_colors <- function(x, theme = NULL, middle = 0, na.value = NULL) {
   discrete <- is_discrete(x)
-  theme <- theme %||% colortheme_defaults(if (discrete) "qualitative" else "sequential")
+  theme <- theme %||% colortheme_default(if (discrete) "qualitative" else "sequential")
   theme <- colortheme(theme)
   if (is.null(na.value))
     na.value <- theme$options$na.color %||% NA

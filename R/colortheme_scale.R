@@ -37,7 +37,7 @@ scale_color_theme <- function(
   }
   args <- list(...)
   args$aesthetics <- aesthetics
-  theme <- theme %||% colortheme_defaults(if (isTRUE(discrete)) "qualitative" else "sequential")
+  theme <- theme %||% colortheme_default(if (isTRUE(discrete)) "qualitative" else "sequential")
   theme <- colortheme(theme)
   if (is.null(discrete))
     discrete <- theme$type == "qualitative"

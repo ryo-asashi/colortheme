@@ -155,13 +155,6 @@ is_discrete <- function(x) {
 
 # local helpers
 
-hcl_palette <- function(n, direction = 1L, alpha = NULL, chroma = 100, luminance = 65) {
-  if (n <= 0L) return(character(0L))
-  hues <- seq(15, 375, length.out = n + 1L)[seq_len(n)] %% 360
-  if (direction < 0L) hues <- rev(hues)
-  grDevices::hcl(h = hues, c = chroma, l = luminance, alpha = alpha)
-}
-
 is_colortheme <- function(object) {
   inherits(object, "colortheme")
 }

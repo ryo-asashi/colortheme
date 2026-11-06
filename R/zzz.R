@@ -1,4 +1,4 @@
 .onLoad <- function(libname, pkgname) {
-  init_colortheme(env = colortheme_registry(), pkgname = pkgname)
+  init_colortheme()
   invisible(NULL)
 }

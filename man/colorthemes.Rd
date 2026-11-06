@@ -61,6 +61,9 @@ register_colortheme(
   name = "sand", source = "custom", type = "sequential"
 )
 colorthemes(name = "sand")
+
+# Remove the custom theme by passing NULL
+register_colortheme(NULL, name = "sand", source = "custom")
 }
 \seealso{
 \code{\link{colortheme}}

@@ -41,7 +41,7 @@ It acts as a versatile bridge between base R graphics, custom color definitions,
 
 You can install the development version from GitHub:
 
-```{r}
+```{r, eval=FALSE}
 # install.packages("pak")
 pak::pak("ryo-asashi/colortheme")
 ```
@@ -101,7 +101,7 @@ ramp(c(0, 0.5, 1.0))
 # Continuous mapping (Sequential)
 par(mfrow = c(1L, 2L))
 plot(cars, col = map_to_colors(cars$speed), pch = 19)
-plot(cars, col = map_to_colors(cars$speed, "Viridis"), pch = 19)
+plot(cars, col = map_to_colors(cars$speed, "Viridis_r"), pch = 19)
 
 # Discrete mapping (Qualitative)
 plot(iris$Sepal.Length, iris$Sepal.Width,
@@ -121,7 +121,7 @@ library(ggplot2)
 # Qualitative scale
 ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
   geom_point(size = 3) +
-  scale_color_theme("Okabe-Ito")
+  scale_color_theme("Okabe-Ito_r")
 
 # Continuous diverging scale with custom midpoint
 ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +

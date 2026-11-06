@@ -37,11 +37,11 @@ test_that("colortheme() creates themes from color vectors, palettes, and ramps",
 
 test_that("colortheme() retrieves built-in themes and parses URL-like query syntax", {
   # Built-in themes from colortheme and grDevices
-  ct_midr <- colortheme("midr")
-  expect_equal(ct_midr$type, "diverging")
-  expect_equal(ct_midr$name, "midr")
+  ct_azurerose <- colortheme("azurerose")
+  expect_equal(ct_azurerose$type, "diverging")
+  expect_equal(ct_azurerose$name, "azurerose")
 
-  ct_hcl <- colortheme("HCL")
+  ct_hcl <- colortheme("hcl")
   expect_equal(ct_hcl$type, "qualitative")
   expect_length(ct_hcl$palette(6L), 6L)
 
@@ -65,8 +65,8 @@ test_that("colortheme() retrieves built-in themes and parses URL-like query synt
 
   # Errors on unknown theme or malformed query
   expect_error(colortheme("non_existent_theme_xyz"), "not found")
-  expect_error(colortheme("midr/non_existent"), "not found")
-  expect_error(colortheme("midr?invalid_query_no_equals"), "can't be parsed")
+  expect_error(colortheme("colortheme/non_existent"), "not found")
+  expect_error(colortheme("azurerose?invalid_query_no_equals"), "can't be parsed")
 })
 
 test_that("colortheme modification, subset assignment, and formatting options work", {
@@ -110,14 +110,14 @@ test_that("colortheme modification, subset assignment, and formatting options wo
 
 test_that("print.colortheme and plot.colortheme execute cleanly", {
   ct_seq  <- colortheme("bluescale")
-  ct_qual <- colortheme("HCL")
+  ct_qual <- colortheme("hcl")
 
   pdf(NULL)
   on.exit(dev.off(), add = TRUE)
 
   expect_output(res <- print(ct_seq, display = TRUE), "Sequential Color Theme: 'bluescale'")
   expect_identical(res, ct_seq)
-  expect_output(print(ct_qual, display = FALSE), "Qualitative Color Theme: 'HCL'")
+  expect_output(print(ct_qual, display = FALSE), "Qualitative Color Theme: 'hcl'")
   expect_invisible(plot(ct_qual, n = 6L))
 })
 
@@ -174,7 +174,7 @@ test_that("map_to_colors() maps discrete and continuous values accurately", {
 
   # Constant vector edge case (d == 0)
   expect_length(map_to_colors(c(5, 5, 5), theme = "bluescale"), 3L)
-  expect_length(map_to_colors(c(0, 0, 0), theme = "midr", middle = 0), 3L)
+  expect_length(map_to_colors(c(0, 0, 0), theme = "azurerose", middle = 0), 3L)
 
   # Discrete mapping (character, factor, logical)
   x_chr <- c("A", "B", "A", NA)
@@ -182,20 +182,20 @@ test_that("map_to_colors() maps discrete and continuous values accurately", {
   expect_equal(c_qual, c("#111111", "#222222", "#111111", "#999999"))
 
   # Qualitative theme for continuous variable throws error
-  expect_error(map_to_colors(1:5, theme = "HCL"), "qualitative color theme can't be used")
+  expect_error(map_to_colors(1:5, theme = "hcl"), "qualitative color theme can't be used")
 })
 
 test_that("scale_color_theme() and scale_fill_theme() construct ggplot2 scales", {
   skip_if_not_installed("ggplot2")
   skip_if_not_installed("scales")
 
-  s_disc <- scale_color_theme("HCL")
+  s_disc <- scale_color_theme("hcl")
   expect_s3_class(s_disc, "ScaleDiscrete")
 
   s_seq <- scale_colour_theme("bluescale")
   expect_s3_class(s_seq, "ScaleContinuous")
 
-  s_div <- scale_fill_theme("midr", middle = 0.5)
+  s_div <- scale_fill_theme("azurerose", middle = 0.5)
   expect_s3_class(s_div, "ScaleContinuous")
   expect_equal(s_div$aesthetics, "fill")
 
@@ -204,7 +204,7 @@ test_that("scale_color_theme() and scale_fill_theme() construct ggplot2 scales",
   expect_s3_class(s_forced, "ScaleDiscrete")
 
   # Qualitative theme on continuous scale throws error
-  expect_error(scale_color_theme("HCL", discrete = FALSE), "qualitative color theme")
+  expect_error(scale_color_theme("hcl", discrete = FALSE), "qualitative color theme")
 })
 
 test_that("as_palette() and as_ramp() extract color-generating functions", {

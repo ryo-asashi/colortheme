@@ -55,12 +55,10 @@ This function automatically selects the appropriate \strong{ggplot2} scale based
 }
 }
 \examples{
-if (requireNamespace("ggplot2", quietly = TRUE)) {
-  d <- ggplot2::ggplot(iris, ggplot2::aes(Sepal.Length, Sepal.Width, colour = Species)) +
-    ggplot2::geom_point()
-  d + scale_color_theme("Set 1")
-  d + scale_color_theme("SunsetDark", discrete = TRUE)
-}
+d <- ggplot2::ggplot(iris, ggplot2::aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  ggplot2::geom_point()
+d + scale_color_theme("Set 1")
+d + scale_color_theme("SunsetDark", discrete = TRUE)
 }
 \seealso{
 \code{\link{colortheme}}

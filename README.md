@@ -125,7 +125,7 @@ scaling and `NA` management.
 # Continuous mapping (Sequential)
 par(mfrow = c(1L, 2L))
 plot(cars, col = map_to_colors(cars$speed), pch = 19)
-plot(cars, col = map_to_colors(cars$speed, "Viridis"), pch = 19)
+plot(cars, col = map_to_colors(cars$speed, "Viridis_r"), pch = 19)
 ```
 
 <img src="man/figures/README-plot_graphics-1.png" width="100%" />
@@ -154,7 +154,7 @@ library(ggplot2)
 # Qualitative scale
 ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
   geom_point(size = 3) +
-  scale_color_theme("Okabe-Ito")
+  scale_color_theme("Okabe-Ito_r")
 ```
 
 <img src="man/figures/README-plot_ggplot2-1.png" width="100%" />
