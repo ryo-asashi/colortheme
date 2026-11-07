@@ -215,7 +215,7 @@ register_themes_colortheme <- function(env = colortheme_registry()) {
     name = "hcl", source = "colortheme", type = "qualitative", env = env,
     kernel = c(
       text = paste0(
-        "function(n, direction, alpha, chroma, luminance, offset) {",
+        "function(n, direction, alpha, chroma, luminance, offset, ...) {",
         "  if (n <= 0L) return(character(0L));",
         "  hues <- seq(offset, offset + 360 * (1 - 1 / n) * sign(direction), length.out = n) %% 360;",
         "  hcl(h = hues, c = chroma, l = luminance, alpha = alpha)",
@@ -232,21 +232,38 @@ register_themes_colortheme <- function(env = colortheme_registry()) {
     )
   )
   register_colortheme(
-    name = "bicolor", source = "colortheme", type = "diverging", env = env,
-    kernel = c(text = "function(x, first, second) ifelse(x <= 0.5, first, second)",
-               namespace = "base"),
-    kernel.args = list(first = "#2B5C8F", second = "#D64550")
-  )
-  register_colortheme(
     name = "highlight", source = "colortheme", type = "qualitative", env = env,
-    kernel = c(text = paste0("function(n, accent, base, which = 1L) {",
-                             "x <- rep_len(base, n);",
-                             "x[which] <- rep_len(accent, length(which));",
-                             "x[seq_len(n)]}"), namespace = "base"),
+    kernel = c(
+      text = paste0(
+        "function(n, accent, base, which = 1L, alpha = NULL, ...) {",
+        "  if (n <= 0L) return(character(0L));",
+        "  x <- rep_len(base, n);",
+        "  if (!is.list(which)) which <- as.list(which);",
+        "  acc <- rep_len(accent, length(which));",
+        "  for (i in seq_along(which)) {",
+        "    idx <- which[[i]];",
+        "    idx <- ifelse(idx < 0L, n + 1L + idx, idx);",
+        "    idx <- idx[!is.na(idx) & idx >= 1L & idx <= n];",
+        "    x[idx] <- acc[i];",
+        "  };",
+        "  if (!is.null(alpha) && !is.na(alpha)) x <- adjustcolor(x, alpha.f = alpha);",
+        "  x",
+        "}"
+      ),
+      namespace = "grDevices"
+    ),
     kernel.args = list(
-      accent = c("#D64550", "#2B5C8F"), base = "#BFBFBF", which = 1L
+      accent = c("#D64550", "#2B5C8F", "#E09F3E", "#2A9D8F"),
+      base = "#BFBFBF",
+      which = list(1L, 5L, 9L, 13L),
+      alpha = NULL
+    ),
+    options = list(
+      kernel.size = 16L,
+      reverse.method = "kernel.args$accent <- rev(kernel.args$accent)"
     )
   )
+
   register_colortheme(
     name = "bluescale", source = "colortheme", type = "sequential", env = env,
     kernel = c("#132B43", "#56B1F7"),
@@ -257,6 +274,7 @@ register_themes_colortheme <- function(env = colortheme_registry()) {
     kernel = c("#FEFEFE", "#0F0F0F"),
     kernel.args = list(mode = "ramp")
   )
+
   register_colortheme(
     name = "neon", source = "colortheme", type = "sequential", env = env,
     kernel = c(
@@ -272,7 +290,17 @@ register_themes_colortheme <- function(env = colortheme_registry()) {
     kernel.args = list(mode = "ramp")
   )
 
-  # washoku
+  register_colortheme(
+    name = "steps", source = "colortheme", type = "diverging", env = env,
+    kernel = c("#2B5C8F", "#EAEAEA", "#D64550"),
+    options = list(ramp.steps = 11L)
+  )
+  register_colortheme(
+    name = "bluesteps", source = "colortheme", type = "sequential", env = env,
+    kernel = c("#132B43", "#56B1F7"),
+    options = list(ramp.steps = 11L)
+  )
+
   register_colortheme(
     name = "ukiyoe", source = "colortheme", type = "qualitative", env = env,
     kernel = c(

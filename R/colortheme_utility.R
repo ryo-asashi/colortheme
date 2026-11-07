@@ -6,6 +6,7 @@
 #'
 #' @param x a vector of data values (discrete or continuous) to be mapped to colors.
 #' @param theme a color theme name (e.g., \code{"Viridis"}), a \code{"colortheme"} object, a character vector of color names, or a palette/ramp function. See \code{\link{colortheme}} for details.
+#' @param discrete logical. If \code{TRUE}, a discrete scale is used regardless of the data type and the theme type.
 #' @param middle a numeric value specifying the midpoint for diverging color themes. Default is \code{0}.
 #' @param na.value a character string specifying the color for \code{NA} values. If \code{NULL} (default), falls back to the theme's \code{na.color} option.
 #'
@@ -22,25 +23,19 @@
 #' plot(iris$Sepal.Length, iris$Sepal.Width,
 #'      col = map_to_colors(iris$Species, "Set 2"), pch = 19)
 #' @export map_to_colors
-map_to_colors <- function(x, theme = NULL, middle = 0, na.value = NULL) {
-  discrete <- is_discrete(x)
+map_to_colors <- function(x, theme = NULL, discrete = NULL, middle = 0, na.value = NULL) {
+  discrete <- discrete %||% is_discrete(x)
   theme <- theme %||% colortheme_default(if (discrete) "qualitative" else "sequential")
   theme <- colortheme(theme)
-  if (is.null(na.value))
-    na.value <- theme$options$na.color %||% NA
+  na.value <- na.value %||% (theme$options$na.color %||% NA_character_)
   if (discrete) {
-    x <- as.integer(as.factor(x))
-    cols <- theme$palette(max(x, na.rm = TRUE))[x]
+    f <- as.factor(x)
+    n <- nlevels(f)
+    cols <- if (n > 0L) theme$palette(n)[as.integer(f)] else character(length(x))
   } else {
-    if (theme$type == "qualitative") {
-      stop("qualitative color theme can't be used for continuous variable", call. = FALSE)
-    } else if (theme$type == "sequential") {
-      cols <- theme$ramp(rescale(x))
-    } else if (theme$type == "diverging") {
-      cols <- theme$ramp(rescale(x, middle = middle))
-    } else {
-      cols <- rep.int(1L, length(x))
-    }
+    m <- if (theme$type == "diverging") middle else NULL
+    x <- rescale(x, middle = m)
+    cols <- theme$ramp(x)
   }
   cols[is.na(cols)] <- na.value
   cols

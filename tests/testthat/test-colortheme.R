@@ -181,8 +181,9 @@ test_that("map_to_colors() maps discrete and continuous values accurately", {
   c_qual <- map_to_colors(x_chr, theme = colortheme(c("#111111", "#222222"), type = "qualitative"), na.value = "#999999")
   expect_equal(c_qual, c("#111111", "#222222", "#111111", "#999999"))
 
-  # Qualitative theme for continuous variable throws error
-  expect_error(map_to_colors(1:5, theme = "hcl"), "qualitative color theme can't be used")
+  # Qualitative theme for continuous variable treated as discrete
+  c_disc <- map_to_colors(1:5, theme = "hcl", disc = TRUE)
+  expect_equal(c_disc, c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"))
 })
 
 test_that("scale_color_theme() and scale_fill_theme() construct ggplot2 scales", {
@@ -204,7 +205,7 @@ test_that("scale_color_theme() and scale_fill_theme() construct ggplot2 scales",
   expect_s3_class(s_forced, "ScaleDiscrete")
 
   # Qualitative theme on continuous scale throws error
-  expect_error(scale_color_theme("hcl", discrete = FALSE), "qualitative color theme")
+  expect_no_error(scale_color_theme("hcl", discrete = FALSE))
 })
 
 test_that("as_palette() and as_ramp() extract color-generating functions", {

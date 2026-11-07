@@ -353,6 +353,8 @@ make_theme <- function(
     switch(type, qualitative = "recycle", "interpolate")
   options$palette.reverse <- options$palette.reverse %||% FALSE
   options$ramp.rescaler <- options$ramp.rescaler %||% c(0, 1)
+  options$ramp.steps <- options$ramp.steps %||%
+    switch(type, qualitative = min(options$kernel.size, Inf), Inf)
   options$na.color <- options$na.color %||% NA
   options$reverse.method <- options$reverse.method %||% NA
 
@@ -424,6 +426,21 @@ make_theme <- function(
       return(ret)
     }
     x_ok <- pmin(1, pmax(0, x[!ng]))
+    brks <- options$ramp.steps
+    if (!is.null(brks) && !all(is.na(brks) | is.infinite(brks))) {
+      if (!is.numeric(brks))
+        stop("'ramp.steps' option must be an integer or a numeric vector of cutoffs", call. = FALSE)
+      if (length(brks) == 1L && brks >= 1L && brks == as.integer(brks)) {
+        k <- as.integer(brks)
+        cuts <- seq.int(0, 1, length.out = k + 1L)
+      } else {
+        cuts <- c(-Inf, sort(unique(brks[0 < brks & brks < 1])), Inf)
+        k <- length(cuts) - 1L
+      }
+      idx <- findInterval(x_ok, cuts, all.inside = TRUE)
+      pts <- if (k == 1L) 0.5 else seq.int(0, 1, length.out = k)
+      x_ok <- pts[idx]
+    }
     rsc <- options$ramp.rescaler %||% c(0, 1)
     if (!is.numeric(rsc) || length(rsc) != 2L)
       stop("'ramp.rescaler' option must be a numeric vector of length 2", call. = FALSE)
@@ -597,8 +614,8 @@ print.colortheme <- function(x, display = TRUE, ...) {
     }, character(1L))
     cat(paste0(nms, ": ", vals, collapse = "\n"), "\n", sep = "")
   }
-  if (display)
-    plot.colortheme(x, text = text)
+  cat("\n")
+  if (display) plot.colortheme(x, text = text)
   invisible(x)
 }
 

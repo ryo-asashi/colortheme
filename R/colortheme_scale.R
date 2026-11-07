@@ -44,21 +44,19 @@ scale_color_theme <- function(
   if (discrete) {
     args$palette <- theme$palette
     args$guide <- args$guide %||% "legend"
-    args$na.value <- args$na.value %||% theme$options$na.color
+    args$na.value <- args$na.value %||% (theme$options$na.color %||% "grey50")
     scale <- do.call(ggplot2::discrete_scale, args)
   } else {
-    if (theme$type == "qualitative")
-      stop("qualitative color theme can't be used for continuous scales", call. = FALSE)
-    rescale_fun <- if (theme$type == "sequential") {
-      scales::rescale
-    } else if (theme$type == "diverging") {
+    rescale_fun <- if (theme$type == "diverging") {
       function(x, to = c(0, 1), from = range(x, na.rm = TRUE))
         scales::rescale_mid(x, to, from, mid = middle)
+    } else {
+      scales::rescale
     }
     args$palette <- theme$ramp
     args$rescaler <- rescale_fun
     args$guide <- args$guide %||% "colorbar"
-    args$na.value <- args$na.value %||% theme$options$na.color
+    args$na.value <- args$na.value %||% (theme$options$na.color %||% "grey50")
     scale <- do.call(ggplot2::continuous_scale, args)
   }
   scale

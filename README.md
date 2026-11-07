@@ -23,19 +23,19 @@ seamless scale integration for **ggplot2**.
 
 ## Features
 
-1.  Unified Dispatcher (`colortheme()`): Effortlessly retrieve
+1.  **Unified Dispatcher (`colortheme()`)**: Effortlessly retrieve
     registered themes by name, build themes from color vectors or
     functions, or modify existing themes on the fly.
-2.  Compact Query Syntax: Customize themes instantly using query strings
-    (e.g., reversing order with `_r`, specifying types with `@qual`, or
-    adjusting transparency and missing-value colors with
-    `?alpha=0.5;na.color='gray'`).
-3.  Dual Functional Interface: Extract discrete palette functions
-    (`$palette(n)`) or continuous color ramp functions (`$ramp(x)`) from
-    any theme.
-4.  Base R Data Mapping (`map_to_colors()`): Directly map discrete or
-    continuous vectors into hexadecimal color codes for base R plots.
-5.  Seamless **ggplot2** Scales: Automatically apply discrete or
+2.  **Compact Query Syntax**: Customize themes instantly using query
+    strings (e.g., reversing order with `_r`, specifying types with
+    `@qual`, discretizing gradients with `?ramp.steps=5`, or adjusting
+    transparency with `?alpha=0.5;na.color='gray'`).
+3.  **Dual Functional Interface**: Extract discrete palette functions
+    (`$palette(n)`) or continuous/stepped color ramp functions
+    (`$ramp(x)`) from any theme.
+4.  **Base R Data Mapping (`map_to_colors()`)**: Directly map discrete
+    or continuous vectors into hexadecimal color codes for base R plots.
+5.  **Seamless ggplot2 Scales**: Automatically apply discrete or
     continuous scales using `scale_color_theme()` and
     `scale_fill_theme()`, complete with proper midpoint handling for
     diverging palettes.
@@ -86,8 +86,6 @@ load and use it. You can retrieve pre-defined palettes or apply the
 compact query syntax to reverse colors, change types, or inject options.
 
 ``` r
-library(colortheme)
-
 # Retrieve a built-in sequential theme and generate colors
 ct <- colortheme("Viridis")
 ct$palette(5L)
@@ -125,10 +123,10 @@ ramp(c(0, 0.5, 1.0))
 scaling and `NA` management.
 
 ``` r
-# Continuous mapping (Sequential)
-par(mfrow = c(1L, 2L))
-plot(cars, col = map_to_colors(cars$speed), pch = 19)
-plot(cars, col = map_to_colors(cars$speed, "Viridis_r"), pch = 19)
+# Continuous mapping (Sequential & Step-wise sequential)
+par(mfrow = c(1L, 2L), mar = c(3, 3, 1, 1))
+plot(cars, col = map_to_colors(cars$speed), pch = 19, cex = 1.2)
+plot(cars, col = map_to_colors(cars$speed, "ukiyoe@seq"), pch = 19, cex = 1.2)
 ```
 
 <img src="man/figures/README-plot_graphics-1.png" width="100%" />
@@ -137,9 +135,9 @@ plot(cars, col = map_to_colors(cars$speed, "Viridis_r"), pch = 19)
 
 # Discrete mapping (Qualitative)
 plot(iris$Sepal.Length, iris$Sepal.Width,
-     col = map_to_colors(iris$Species), pch = 19)
+     col = map_to_colors(iris$Species), pch = 19, cex = 1.2)
 plot(iris$Sepal.Length, iris$Sepal.Width,
-     col = map_to_colors(iris$Species, "muted"), pch = 19)
+     col = map_to_colors(iris$Species, "muted"), pch = 19, cex = 1.2)
 ```
 
 <img src="man/figures/README-plot_graphics-2.png" width="100%" />
@@ -167,10 +165,64 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
 # Continuous diverging scale with custom midpoint
 ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
   geom_tile() +
-  scale_fill_theme("Cividis", middle = 0.017)
+  scale_fill_theme("Cividis", middle = 0.02)
 ```
 
 <img src="man/figures/README-plot_ggplot2-2.png" width="100%" />
+
+### 5. Highlighting & Step Coloring
+
+You can emphasize specific categories or quantize continuous gradients
+into discrete intervals directly through the query string—without
+modifying your data or switching scale functions.
+
+- **Discrete Highlighting (`"highlight"`)**: Emphasizes target
+  categories specified by `which` using `accent` colors while keeping
+  others in `base` gray. Supports negative indices (e.g., `-1` for the
+  last category) and `list()` inputs to group multiple categories under
+  the same accent color.
+
+``` r
+# Discrete highlighting (emphasize the 1st category)
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point(size = 3) +
+  scale_color_theme("highlight")
+```
+
+<img src="man/figures/README-programmable-themes-1.png" width="100%" />
+
+``` r
+
+# Discrete highlighting (emphasize the 2nd category and the 3rd category)
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point(size = 3) +
+  scale_color_theme("highlight_r?which=list(2L, -1L)")
+```
+
+<img src="man/figures/README-programmable-themes-2.png" width="100%" />
+
+- **Stepped / Binned Ramps (`?ramp.steps=...`)**: Any theme can be
+  converted into a stepped ramp by setting `ramp.steps` to an integer
+  $k$ (for $k$ equal bins) or a numeric vector of cutoffs in $(0, 1)$.
+
+``` r
+# Step-wise diverging scale (quantize 'Temps' into 12 discrete bands)
+ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_tile() +
+  scale_fill_theme("Temps?ramp.steps=12L", middle = 0.02)
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
+``` r
+
+# Step-wise qualitative scale (use 'ukiyoe' colors as discrete bands)
+ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_tile() +
+  scale_fill_theme("ukiyoe@s")
+```
+
+<img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />
 
 ## Function Reference
 

@@ -4,12 +4,14 @@
 \alias{map_to_colors}
 \title{Map Values to Colors using Color Themes}
 \usage{
-map_to_colors(x, theme = NULL, middle = 0, na.value = NULL)
+map_to_colors(x, theme = NULL, discrete = NULL, middle = 0, na.value = NULL)
 }
 \arguments{
 \item{x}{a vector of data values (discrete or continuous) to be mapped to colors.}
 
 \item{theme}{a color theme name (e.g., \code{"Viridis"}), a \code{"colortheme"} object, a character vector of color names, or a palette/ramp function. See \code{\link{colortheme}} for details.}
+
+\item{discrete}{logical. If \code{TRUE}, a discrete scale is used regardless of the data type and the theme type.}
 
 \item{middle}{a numeric value specifying the midpoint for diverging color themes. Default is \code{0}.}
 
