@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   fig.width = 6
 )
 
-pkgs <- c("khroma", "viridisLite", "RColorBrewer", "patchwork", "ggplot2", "DT", "htmltools")
+pkgs <- c("khroma", "viridisLite", "RColorBrewer", "ggplot2", "DT", "htmltools")
 to_install <- pkgs[!pkgs %in% rownames(installed.packages())]
 if (length(to_install) > 0L) install.packages(to_install)
 
@@ -172,42 +172,35 @@ To apply your color themes to **ggplot2** plots, use the `scale_color_theme()` a
 
 ```{r, fig.width = 6, fig.height = 4, warning = FALSE}
 library(ggplot2)
-library(patchwork)
 theme_set(theme_minimal())
 
 set.seed(42)
 dataset <- diamonds[sample(nrow(diamonds), 5000L), ]
 
 p <- ggplot(dataset) + geom_point(aes(carat, price, col = color))
-wrap_plots(
-  p + scale_color_theme("shiki"),
-  p + scale_color_theme("viridisLite/mako", discrete = TRUE),
-  p + scale_color_theme("tokyo@qual"),
-  p + scale_color_theme("highlight?base='#00000000'&which=list(1, 7)")
-)
+p + scale_color_theme("shiki")
+p + scale_color_theme("viridisLite/mako", discrete = TRUE)
+p + scale_color_theme("tokyo@qual")
+p + scale_color_theme("highlight?which=list(1, 6:7);base='00000000'")
 ```
 
 ```{r, fig.width = 6, fig.height = 4, warning = FALSE}
 p2 <- ggplot(dataset) +
   geom_histogram(aes(x = carat, fill = cut), bins = 20)
-wrap_plots(
-  p2 + scale_fill_theme("ukiyoe"),
-  p2 + scale_fill_theme("highlight_r?which=list(1:2, 5)"),
-  p2 + scale_fill_theme("ai@q"),
-  p2 + scale_fill_theme("Zissou 1_r@q")
-)
+p2 + scale_fill_theme("ukiyoe")
+p2 + scale_fill_theme("highlight_r?which=list(1:2, 5)")
+p2 + scale_fill_theme("ai@q")
+p2 + scale_fill_theme("Zissou 1_r@q")
 ```
 
 ```{r, fig.width = 6, fig.height = 4, warning = FALSE}
 # Continuous and stepped scales with sequential, diverging, and qualitative themes
 p3 <- ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
-  geom_raster()
-wrap_plots(
-  p3 + scale_fill_theme("ai"),
-  p3 + scale_fill_theme("Cividis", middle = 0.02),
-  p3 + scale_fill_theme("steps", middle = 0.02),
-  p3 + scale_fill_theme("magma?ramp.steps=6&alpha=0.8")
-)
+  geom_raster() + theme(legend.position = "right")
+p3 + scale_fill_theme("ai")
+p3 + scale_fill_theme("Cividis", middle = 0.02)
+p3 + scale_fill_theme("steps", middle = 0.02)
+p3 + scale_fill_theme("magma?ramp.steps=6&alpha=0.8")
 ```
 
 ```{r, echo = FALSE}
