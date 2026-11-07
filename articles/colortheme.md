@@ -518,51 +518,98 @@ functions. These scales integrate your themes directly into the plot’s
 ``` r
 
 library(ggplot2)
-library(patchwork)
 theme_set(theme_minimal())
 
 set.seed(42)
 dataset <- diamonds[sample(nrow(diamonds), 5000L), ]
 
 p <- ggplot(dataset) + geom_point(aes(carat, price, col = color))
-wrap_plots(
-  p + scale_color_theme("shiki"),
-  p + scale_color_theme("viridisLite/mako", discrete = TRUE),
-  p + scale_color_theme("tokyo@qual"),
-  p + scale_color_theme("highlight?base='#00000000'&which=list(1, 7)")
-)
+p + scale_color_theme("shiki")
 ```
 
 ![](colortheme_files/figure-html/unnamed-chunk-18-1.png)
 
 ``` r
 
+p + scale_color_theme("viridisLite/mako", discrete = TRUE)
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-18-2.png)
+
+``` r
+
+p + scale_color_theme("tokyo@qual")
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-18-3.png)
+
+``` r
+
+p + scale_color_theme("highlight?which=list(1, 6:7);base='00000000'")
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-18-4.png)
+
+``` r
+
 p2 <- ggplot(dataset) +
   geom_histogram(aes(x = carat, fill = cut), bins = 20)
-wrap_plots(
-  p2 + scale_fill_theme("ukiyoe"),
-  p2 + scale_fill_theme("highlight_r?which=list(1:2, 5)"),
-  p2 + scale_fill_theme("ai@q"),
-  p2 + scale_fill_theme("Zissou 1_r@q")
-)
+p2 + scale_fill_theme("ukiyoe")
 ```
 
 ![](colortheme_files/figure-html/unnamed-chunk-19-1.png)
 
 ``` r
 
+p2 + scale_fill_theme("highlight_r?which=list(1:2, 5)")
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-19-2.png)
+
+``` r
+
+p2 + scale_fill_theme("ai@q")
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-19-3.png)
+
+``` r
+
+p2 + scale_fill_theme("Zissou 1_r@q")
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-19-4.png)
+
+``` r
+
 # Continuous and stepped scales with sequential, diverging, and qualitative themes
 p3 <- ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
-  geom_raster()
-wrap_plots(
-  p3 + scale_fill_theme("ai"),
-  p3 + scale_fill_theme("Cividis", middle = 0.02),
-  p3 + scale_fill_theme("steps", middle = 0.02),
-  p3 + scale_fill_theme("magma?ramp.steps=6&alpha=0.8")
-)
+  geom_raster() + theme(legend.position = "right")
+p3 + scale_fill_theme("ai")
 ```
 
 ![](colortheme_files/figure-html/unnamed-chunk-20-1.png)
+
+``` r
+
+p3 + scale_fill_theme("Cividis", middle = 0.02)
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-20-2.png)
+
+``` r
+
+p3 + scale_fill_theme("steps", middle = 0.02)
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-20-3.png)
+
+``` r
+
+p3 + scale_fill_theme("magma?ramp.steps=6&alpha=0.8")
+```
+
+![](colortheme_files/figure-html/unnamed-chunk-20-4.png)
 
 ## Pre-defined color themes
 
