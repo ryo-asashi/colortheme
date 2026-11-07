@@ -8,7 +8,7 @@ appropriately scaling values and handling missing data.
 ## Usage
 
 ``` r
-map_to_colors(x, theme = NULL, middle = 0, na.value = NULL)
+map_to_colors(x, theme = NULL, discrete = NULL, middle = 0, na.value = NULL)
 ```
 
 ## Arguments
@@ -24,6 +24,11 @@ map_to_colors(x, theme = NULL, middle = 0, na.value = NULL)
   character vector of color names, or a palette/ramp function. See
   [`colortheme`](https://ryo-asashi.github.io/colortheme/reference/colortheme.md)
   for details.
+
+- discrete:
+
+  logical. If `TRUE`, a discrete scale is used regardless of the data
+  type and the theme type.
 
 - middle:
 

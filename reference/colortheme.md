@@ -201,12 +201,14 @@ print(ct)
 #>   palette.formatter: "interpolate"
 #>   palette.reverse  : FALSE
 #>   ramp.rescaler    : c(0, 1)
+#>   ramp.steps       : Inf
 #>   na.color         : NA
 #> 
 #> Kernel Arguments:
 #>   palette: "Mako"
 #>   alpha  : NULL
 #>   rev    : FALSE
+#> 
 
 ct$palette(5L)
 #> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"

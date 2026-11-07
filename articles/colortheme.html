@@ -106,8 +106,9 @@ numeric vector
 with values in the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0, 1]</annotation></semantics></math>
 interval and returns a vector of corresponding colors. It maps numeric
-values onto a continuous color gradient, making it suitable for
-<strong>sequential</strong> and <strong>diverging</strong> themes.</p>
+values onto a continuous color gradient (or stepped color bands), making
+it suitable for <strong>sequential</strong> and
+<strong>diverging</strong> themes as well as binned scales.</p>
 <div class="section level3">
 <h3 id="pre-defined-themes">Pre-defined themes<a class="anchor" aria-label="anchor" href="#pre-defined-themes"></a>
 </h3>
@@ -130,6 +131,7 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
 <span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
 <span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
 <span><span class="co">#&gt;   na.color         : NA</span></span>
 <span><span class="co">#&gt;   reverse.method   : NA</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -137,6 +139,8 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <span><span class="co">#&gt;   mode : "ramp"</span></span>
 <span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
 <p><img src="colortheme_files/figure-html/unnamed-chunk-2-1.png" class="r-plt" alt="" width="576"></p>
+<p>The palette and ramp functions are accessible via <code>$</code>
+operator.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">azurerose</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "#0059AC" "#729AD6" "#F7F7F7" "#D67FA7" "#A4136D"</span></span></code></pre></div>
@@ -148,13 +152,20 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <div style="background-color: #A4136D ; width: 100%; height: 25px ; display: inline-block;"></div>
 </div>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">azurerose</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "#0059AC" "#729AD6" "#F7F7F7" "#D67FA7" "#A4136D"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">azurerose</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "#0059AC" "#3371BD" "#5E8CCE" "#8BABDD" "#BDCDEB" "#F7F7F7" "#EBC0D4"</span></span>
+<span><span class="co">#&gt;  [8] "#DD93B6" "#CC6A9B" "#B84083" "#A4136D"</span></span></code></pre></div>
 <div style="display: flex; width: 100%;">
 <div style="background-color: #0059AC ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #729AD6 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #3371BD ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #5E8CCE ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #8BABDD ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #BDCDEB ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #F7F7F7 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #D67FA7 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #EBC0D4 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #DD93B6 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #CC6A9B ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #B84083 ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #A4136D ; width: 100%; height: 25px ; display: inline-block;"></div>
 </div>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -174,6 +185,7 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
 <span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
 <span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
 <span><span class="co">#&gt;   na.color         : NA</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Arguments:</span></span>
@@ -183,8 +195,10 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <span><span class="co">#&gt;   end      : 0.8</span></span>
 <span><span class="co">#&gt;   direction: 1</span></span></code></pre></div>
 <p><img src="colortheme_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="576"></p>
+<p>The palette and ramp can also be extracted using corresponding helper
+functions; <code><a href="../reference/as_palette.html">as_palette()</a></code> and <code><a href="../reference/as_palette.html">as_ramp()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">viridis</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/as_palette.html">as_palette</a></span><span class="op">(</span><span class="va">viridis</span><span class="op">)</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "#414487FF" "#2F6C8EFF" "#21908CFF" "#2FB47CFF" "#7AD151FF"</span></span></code></pre></div>
 <div style="display: flex; width: 100%;">
 <div style="background-color: #414487FF ; width: 100%; height: 25px ; display: inline-block;"></div>
@@ -194,18 +208,27 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <div style="background-color: #7AD151FF ; width: 100%; height: 25px ; display: inline-block;"></div>
 </div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">viridis</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "#404486" "#2E6C8D" "#21908C" "#2EB37B" "#79D151"</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/as_palette.html">as_ramp</a></span><span class="op">(</span><span class="va">viridis</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "#404486" "#39548C" "#32658D" "#2C728D" "#26818D" "#21908C" "#1F9F87"</span></span>
+<span><span class="co">#&gt;  [8] "#26AC80" "#39B976" "#57C665" "#79D151"</span></span></code></pre></div>
 <div style="display: flex; width: 100%;">
 <div style="background-color: #404486 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #2E6C8D ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #39548C ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #32658D ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #2C728D ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #26818D ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #21908C ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #2EB37B ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #1F9F87 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #26AC80 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #39B976 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #57C665 ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #79D151 ; width: 100%; height: 25px ; display: inline-block;"></div>
 </div>
 <p>You can modify themes by <strong>reversing</strong> the color order
 or <strong>changing</strong> the theme type (e.g., from sequential to
-qualitative). These changes can be applied in two ways:</p>
+qualitative). Note that converting a theme to <code>@qualitative</code>
+also turns its <code>$ramp()</code> into a stepped (binned) color ramp
+by default. These changes can be applied in two ways:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>Using Arguments</strong> : provide the appropriate argument
@@ -218,25 +241,151 @@ theme, <code>@q</code> (or longer, such as <code>@qual</code>) to make
 the theme qualitative (<code>@d</code> for diverging, <code>@s</code>
 for sequential).</li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"nightfall"</span>, reverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
-<span>     text <span class="op">=</span> <span class="st">"khroma/nightfall_r"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">#&gt; Qualitative Color Theme: 'azurerose' (from 'colortheme')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #A4136E, #BD4989, #D67FA8, #E8B3CC, #F7F7F7, #AFC4E8, #729BD6, #3B78C2, #005AAD</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 9L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   mode : "palette"</span></span>
+<span><span class="co">#&gt;   alpha: NA</span></span></code></pre>
 <p><img src="colortheme_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"nightfall"</span>, type <span class="op">=</span> <span class="st">"qualitative"</span><span class="op">)</span>,</span>
-<span>     text <span class="op">=</span> <span class="st">"khroma/nightfall@qual"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-6-2.png" class="r-plt" alt="" width="576"></p>
+<pre><code><span><span class="co">#&gt; Qualitative Color Theme: 'azurerose' (from 'colortheme')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #A4136E, #BD4989, #D67FA8, #E8B3CC, #F7F7F7, #AFC4E8, #729BD6, #3B78C2, #005AAD</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 9L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   mode : "palette"</span></span>
+<span><span class="co">#&gt;   alpha: NA</span></span></code></pre>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="576"></p>
+<p>You can also customize kernel arguments and option parameters on the
+fly using query parameters after <code>?</code> (e.g.,
+<code>"highlight?which=1:2"</code> or
+<code>"viridis?ramp.steps=5"</code>).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"viridis_r"</span><span class="op">)</span>,</span>
-<span>     text <span class="op">=</span> <span class="st">"viridisLite/viridis_r"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-6-3.png" class="r-plt" alt="" width="576"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"viridis"</span>, type <span class="op">=</span> <span class="st">"q"</span>, kernel.size <span class="op">=</span> <span class="fl">7</span>, begin <span class="op">=</span> <span class="fl">0</span>, end <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Qualitative Color Theme: 'viridis' (from 'viridisLite')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: palette</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Function:</span></span>
+<span><span class="co">#&gt; function (n, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 7</span></span>
+<span><span class="co">#&gt;   reverse.method   : "kernel.args$direction &lt;- - kernel.args$direction"</span></span>
+<span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   option   : "viridis"</span></span>
+<span><span class="co">#&gt;   alpha    : 1</span></span>
+<span><span class="co">#&gt;   begin    : 0</span></span>
+<span><span class="co">#&gt;   end      : 1</span></span>
+<span><span class="co">#&gt;   direction: 1</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="576"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"viridis@qual"</span>, kernel.size <span class="op">=</span> <span class="fl">8L</span><span class="op">)</span>,</span>
-<span>     text <span class="op">=</span> <span class="st">"viridisLite/viridis@qual"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-6-4.png" class="r-plt" alt="" width="576"></p>
-<p>You can also customize kernel arguments on the fly using query
-parameters after <code>?</code> (e.g.,
-<code>"highlight?which=1:2"</code>).</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"viridis@qual?kernel.size=7;begin=0;end=1"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Qualitative Color Theme: 'viridis' (from 'viridisLite')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: palette</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Function:</span></span>
+<span><span class="co">#&gt; function (n, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 7</span></span>
+<span><span class="co">#&gt;   reverse.method   : "kernel.args$direction &lt;- - kernel.args$direction"</span></span>
+<span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   option   : "viridis"</span></span>
+<span><span class="co">#&gt;   alpha    : 1</span></span>
+<span><span class="co">#&gt;   begin    : 0</span></span>
+<span><span class="co">#&gt;   end      : 1</span></span>
+<span><span class="co">#&gt;   direction: 1</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" alt="" width="576"></p>
+<p>By setting <code>ramp.steps</code> (either as an integer for equal
+bins or as a numeric vector of cutoffs in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(0, 1)</annotation></semantics></math>),
+any continuous theme can be quantized into a stepped color ramp:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Quantize into 5 equal steps</span></span>
+<span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"azurerose?ramp.steps=5"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Diverging Color Theme: 'azurerose' (from 'colortheme')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #005AAD, #3B78C2, #729BD6, #AFC4E8, #F7F7F7, #E8B3CC, #D67FA8, #BD4989, #A4136E</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 9L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : 5</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   mode : "ramp"</span></span>
+<span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># Split at custom cutoffs to create a desired ramp</span></span>
+<span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"azurerose?ramp.steps=seq.int(.4, .6, by=.02)"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Diverging Color Theme: 'azurerose' (from 'colortheme')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #005AAD, #3B78C2, #729BD6, #AFC4E8, #F7F7F7, #E8B3CC, #D67FA8, #BD4989, #A4136E</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 9L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : c(0.4, 0.42, 0.44, 0.46, 0.48, 0.5, 0.52, 0.54, 0.56, 0.58, 0.6)</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   mode : "ramp"</span></span>
+<span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-10-2.png" class="r-plt" alt="" width="576"></p>
 <p>When multiple packages provide a theme with the same name (e.g.,
 <code>"Paired"</code>), you can specify which one to use in two
 ways:</p>
@@ -250,16 +399,53 @@ ways:</p>
 forward slash to the theme name (e.g.,
 <code>"RColorBrewer/Paired"</code>).</li>
 </ol>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># qualitative color theme "Paired" (package:grDevices)</span></span>
-<span><span class="va">paired</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"Paired"</span>, source <span class="op">=</span> <span class="st">"grDevices"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">paired</span>, text <span class="op">=</span> <span class="st">"grDevices/Paired"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"Paired"</span>, source <span class="op">=</span> <span class="st">"grDevices"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Qualitative Color Theme: 'Paired' (from 'grDevices')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: palette</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Function:</span></span>
+<span><span class="co">#&gt; function (n = NULL, palette = "Okabe-Ito", alpha, recycle = FALSE, names = FALSE)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 12L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : 12</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   palette: "Paired"</span></span>
+<span><span class="co">#&gt;   alpha  : NULL</span></span>
+<span><span class="co">#&gt;   recycle: FALSE</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># qualitative color theme "Paired" (package:RColorBrewer)</span></span>
-<span><span class="va">paired2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"RColorBrewer/Paired"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">paired2</span>, text <span class="op">=</span> <span class="st">"RColorBrewer/Paired"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-7-2.png" class="r-plt" alt="" width="576"></p>
+<span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"RColorBrewer/Paired"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Qualitative Color Theme: 'Paired' (from 'RColorBrewer')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #A6CEE3, #1F78B4, #B2DF8A, #33A02C, #FB9A99, #E31A1C, #FDBF6F, #FF7F00, #CAB2D6, #6A3D9A, #FFFF99, #B15928</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 12L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : 12</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   mode : "palette"</span></span>
+<span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level3">
 <h3 id="custom-themes">Custom themes<a class="anchor" aria-label="anchor" href="#custom-themes"></a>
@@ -267,7 +453,7 @@ forward slash to the theme name (e.g.,
 <p>Alternatively, you can create a new <code>"colortheme"</code> object
 by passing a custom color vector or function to the first argument of
 <code><a href="../reference/colortheme.html">colortheme()</a></code>.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a new color theme using a color vector</span></span>
 <span><span class="va">mytheme</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#003f5c"</span>, <span class="st">"#7a5195"</span>, <span class="st">"#ef5675"</span>, <span class="st">"#ffa600"</span><span class="op">)</span>,</span>
@@ -286,34 +472,42 @@ by passing a custom color vector or function to the first argument of
 <span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
 <span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
 <span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
 <span><span class="co">#&gt;   na.color         : NA</span></span>
 <span><span class="co">#&gt;   reverse.method   : NA</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Arguments:</span></span>
 <span><span class="co">#&gt;   mode : "ramp"</span></span>
 <span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mytheme</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"</span></span></code></pre></div>
-<div style="display: flex; width: 100%;">
-<div style="background-color: #003F5B ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #614D86 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #B85485 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #F46C63 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #FFA500 ; width: 100%; height: 25px ; display: inline-block;"></div>
-</div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mytheme</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"</span></span></code></pre></div>
-<div style="display: flex; width: 100%;">
-<div style="background-color: #003F5B ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #614D86 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #B85485 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #F46C63 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #FFA500 ; width: 100%; height: 25px ; display: inline-block;"></div>
-</div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="576"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/as_palette.html">as_palette</a></span><span class="op">(</span><span class="va">mytheme</span><span class="op">)</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"</span></span></code></pre></div>
+<div style="display: flex; width: 100%;">
+<div style="background-color: #003F5B ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #614D86 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #B85485 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #F46C63 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #FFA500 ; width: 100%; height: 25px ; display: inline-block;"></div>
+</div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/as_palette.html">as_ramp</a></span><span class="op">(</span><span class="va">mytheme</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "#003F5B" "#33456C" "#534B7D" "#704F8F" "#94528E" "#B85485" "#D9557B"</span></span>
+<span><span class="co">#&gt;  [8] "#F15F6E" "#F77857" "#FB8F3B" "#FFA500"</span></span></code></pre></div>
+<div style="display: flex; width: 100%;">
+<div style="background-color: #003F5B ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #33456C ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #534B7D ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #704F8F ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #94528E ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #B85485 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #D9557B ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #F15F6E ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #F77857 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #FB8F3B ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #FFA500 ; width: 100%; height: 25px ; display: inline-block;"></div>
+</div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a new color theme using a color function</span></span>
 <span><span class="va">rainbow</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span></span>
 <span>  <span class="fu">grDevices</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">rainbow</a></span>,</span>
@@ -332,11 +526,12 @@ by passing a custom color vector or function to the first argument of
 <span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
 <span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
 <span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
 <span><span class="co">#&gt;   na.color         : NA</span></span>
 <span><span class="co">#&gt;   reverse.method   : NA</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rainbow</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/as_palette.html">as_palette</a></span><span class="op">(</span><span class="va">rainbow</span><span class="op">)</span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "#FF0000" "#CCFF00" "#00FF66" "#0066FF" "#CC00FF"</span></span></code></pre></div>
 <div style="display: flex; width: 100%;">
 <div style="background-color: #FF0000 ; width: 100%; height: 25px ; display: inline-block;"></div>
@@ -345,43 +540,29 @@ by passing a custom color vector or function to the first argument of
 <div style="background-color: #0066FF ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #CC00FF ; width: 100%; height: 25px ; display: inline-block;"></div>
 </div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">rainbow</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.00</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">1.00</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "#FF0000" "#81FF00" "#00FFFB" "#7B00FF" "#FF0006"</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/as_palette.html">as_ramp</a></span><span class="op">(</span><span class="va">rainbow</span><span class="op">)</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  [1] "#FF0000" "#FF9800" "#CCFF00" "#35FF00" "#00FF64" "#00FFFB" "#006AFF"</span></span>
+<span><span class="co">#&gt;  [8] "#2F00FF" "#C600FF" "#FF009D" "#FF0006"</span></span></code></pre></div>
 <div style="display: flex; width: 100%;">
 <div style="background-color: #FF0000 ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #81FF00 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #FF9800 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #CCFF00 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #35FF00 ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #00FF64 ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #00FFFB ; width: 100%; height: 25px ; display: inline-block;"></div>
-<div style="background-color: #7B00FF ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #006AFF ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #2F00FF ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #C600FF ; width: 100%; height: 25px ; display: inline-block;"></div>
+<div style="background-color: #FF009D ; width: 100%; height: 25px ; display: inline-block;"></div>
 <div style="background-color: #FF0006 ; width: 100%; height: 25px ; display: inline-block;"></div>
 </div>
 <p>You can register a custom theme to call it by name later in your
 current R session. To do so, use the <code><a href="../reference/colorthemes.html">register_colortheme()</a></code>
 function.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/colorthemes.html">register_colortheme</a></span><span class="op">(</span><span class="va">mytheme</span>, name <span class="op">=</span> <span class="st">"mytheme"</span>, source <span class="op">=</span> <span class="st">"custom"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"mytheme_r@div"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Diverging Color Theme: 'mytheme' (from 'custom')</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Kernel Class: color</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Kernel Colors:</span></span>
-<span><span class="co">#&gt; #ffa600, #ef5675, #7a5195, #003f5c</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Options:</span></span>
-<span><span class="co">#&gt;   kernel.size      : 4L</span></span>
-<span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
-<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
-<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
-<span><span class="co">#&gt;   na.color         : NA</span></span>
-<span><span class="co">#&gt;   reverse.method   : NA</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Kernel Arguments:</span></span>
-<span><span class="co">#&gt;   mode : "ramp"</span></span>
-<span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"custom/mytheme@q"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"custom/mytheme@q"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Qualitative Color Theme: 'mytheme' (from 'custom')</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: color</span></span>
@@ -394,13 +575,36 @@ function.</p>
 <span><span class="co">#&gt;   palette.formatter: "recycle"</span></span>
 <span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
 <span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
 <span><span class="co">#&gt;   na.color         : NA</span></span>
 <span><span class="co">#&gt;   reverse.method   : NA</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Arguments:</span></span>
 <span><span class="co">#&gt;   mode : "palette"</span></span>
 <span><span class="co">#&gt;   alpha: NA</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-12-2.png" class="r-plt" alt="" width="576"></p>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-17-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"mytheme_r@div?alpha=.5"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Diverging Color Theme: 'mytheme' (from 'custom')</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #ffa600, #ef5675, #7a5195, #003f5c</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Options:</span></span>
+<span><span class="co">#&gt;   kernel.size      : 4L</span></span>
+<span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
+<span><span class="co">#&gt;   palette.reverse  : FALSE</span></span>
+<span><span class="co">#&gt;   ramp.rescaler    : c(0, 1)</span></span>
+<span><span class="co">#&gt;   ramp.steps       : Inf</span></span>
+<span><span class="co">#&gt;   na.color         : NA</span></span>
+<span><span class="co">#&gt;   reverse.method   : NA</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Arguments:</span></span>
+<span><span class="co">#&gt;   mode : "ramp"</span></span>
+<span><span class="co">#&gt;   alpha: 0.5</span></span></code></pre></div>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-17-2.png" class="r-plt" alt="" width="576"></p>
 </div>
 <div class="section level3">
 <h3 id="using-themes-with-ggplot2">Using themes with <strong>ggplot2</strong><a class="anchor" aria-label="anchor" href="#using-themes-with-ggplot2"></a>
@@ -409,43 +613,43 @@ function.</p>
 <code><a href="../reference/scale_color_theme.html">scale_color_theme()</a></code> and <code><a href="../reference/scale_color_theme.html">scale_fill_theme()</a></code>
 functions. These scales integrate your themes directly into the plot’s
 <code>color</code> and <code>fill</code> aesthetics.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/get_theme.html" class="external-link">theme_set</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">dataset</span> <span class="op">&lt;-</span> <span class="va">diamonds</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">diamonds</span><span class="op">)</span>, <span class="fl">5000L</span><span class="op">)</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">carat</span>, <span class="va">price</span>, col <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span></span>
 <span>  <span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"shiki"</span><span class="op">)</span>,</span>
 <span>  <span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"viridisLite/mako"</span>, discrete <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  <span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"tokyo@qual"</span><span class="op">)</span>,</span>
-<span>  <span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"highlight?base='#80808010'&amp;which=6:7"</span><span class="op">)</span></span>
+<span>  <span class="va">p</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_color_theme</a></span><span class="op">(</span><span class="st">"highlight?base='#00000000'&amp;which=list(1, 7)"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<p><img src="colortheme_files/figure-html/unnamed-chunk-18-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dataset</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, fill <span class="op">=</span> <span class="va">cut</span><span class="op">)</span>, bins <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span></span>
 <span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"ukiyoe"</span><span class="op">)</span>,</span>
-<span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"khroma/discreterainbow"</span><span class="op">)</span>,</span>
-<span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"mytheme@q"</span><span class="op">)</span>,</span>
-<span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"highlight?which=1:2"</span><span class="op">)</span></span>
+<span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"highlight_r?which=list(1:2, 5)"</span><span class="op">)</span>,</span>
+<span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"ai@q"</span><span class="op">)</span>,</span>
+<span>  <span class="va">p2</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"Zissou 1_r@q"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-14-1.png" class="r-plt" alt="" width="576"></p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Continuous scales with sequential and diverging themes</span></span>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-19-1.png" class="r-plt" alt="" width="576"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Continuous and stepped scales with sequential, diverging, and qualitative themes</span></span>
 <span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">faithfuld</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">waiting</span>, <span class="va">eruptions</span>, fill <span class="op">=</span> <span class="va">density</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_raster</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html" class="external-link">grid.arrange</a></span><span class="op">(</span></span>
+<span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span></span>
 <span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"ai"</span><span class="op">)</span>,</span>
-<span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"Cividis"</span>, middle <span class="op">=</span> <span class="fl">0.017</span><span class="op">)</span>,</span>
-<span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"ai_r"</span><span class="op">)</span>,</span>
-<span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"Viridis?alpha=0.5"</span><span class="op">)</span></span>
+<span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"Cividis"</span>, middle <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span>,</span>
+<span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"steps"</span>, middle <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span>,</span>
+<span>  <span class="va">p3</span> <span class="op">+</span> <span class="fu"><a href="../reference/scale_color_theme.html">scale_fill_theme</a></span><span class="op">(</span><span class="st">"magma?ramp.steps=6&amp;alpha=0.8"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="colortheme_files/figure-html/unnamed-chunk-15-1.png" class="r-plt" alt="" width="576"></p>
+<p><img src="colortheme_files/figure-html/unnamed-chunk-20-1.png" class="r-plt" alt="" width="576"></p>
 </div>
 </div>
 <div class="section level2">
@@ -457,7 +661,12 @@ other packages being installed, so for full functionality, please ensure
 you have already installed the <strong>viridisLite</strong>,
 <strong>RColorBrewer</strong>, and <strong>khroma</strong> packages.</p>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["ArmyRose","azurerose","bam","berlin","Berlin","bicolor","Blue-Red","Blue-Red 2","Blue-Red 3","Blue-Yellow 2","Blue-Yellow 3","BrBG","BrBG","broc","Broc","bukavu","BuRd","Cividis","cork","Cork","Cyan-Magenta","Earth","Fall","fes","Geyser","Green-Brown","Green-Orange","kasane","lisbon","Lisbon","managua","nightfall","oleron","PiYG","PiYG","PRGn","PRGn","PRGn","PuOr","PuOr","Purple-Brown","Purple-Green","RdBu","RdBu","RdGy","RdGy","RdYlBu","RdYlBu","RdYlGn","RdYlGn","Red-Green","roma","Roma","Spectral","Spectral","sunset","TealRose","Temps","tofino","Tofino","Tropic","vanimo","vik","Vik","Zissou 1","Accent","Accent","Alphabet","bright","Classic Tableau","Cold","dark","Dark 2","Dark 3","Dark2","discreterainbow","Dynamic","ggplot2","Harmonic","hcl","highcontrast","highlight","land","light","mediumcontrast","muted","Okabe-Ito","okabeito","okabeitoblack","Paired","Paired","pale","Pastel 1","Pastel 2","Pastel1","Pastel2","Polychrome 36","R3","R4","Set 1","Set 2","Set 3","Set1","Set2","Set3","shiki","soil","stratigraphy","Tableau 10","ukiyoe","vibrant","Warm","acton","ag_GrnYl","ag_Sunset","ai","bamako","bamO","batlow","Batlow","batlowK","batlowW","bilbao","Blue-Yellow","Blues","Blues","Blues 2","Blues 3","bluescale","BluGrn","BluYl","brocO","BrwnYl","buda","BuGn","BuGn","BuPu","BuPu","Burg","BurgYl","cividis","corkO","Dark Mint","davos","devon","Emrld","glasgow","GnBu","GnBu","grayC","Grays","grayscale","Green-Yellow","Greens","Greens","Greens 2","Greens 3","Greys","hawaii","Hawaii","Heat","Heat 2","imola","incandescent","inferno","Inferno","iridescent","lajolla","Lajolla","lapaz","Light Grays","lipari","Magenta","magma","mako","Mako","Mint","navia","naviaW","neon","nuuk","Oranges","Oranges","OrRd","OrRd","OrYel","oslo","Oslo","Peach","PinkYl","plasma","Plasma","PuBu","PuBu","PuBuGn","PuBuGn","PuRd","PuRd","Purp","Purple-Blue","Purple-Orange","Purple-Yellow","Purples","Purples","Purples 2","Purples 3","PurpOr","RdPu","RdPu","Red-Blue","Red-Purple","Red-Yellow","RedOr","Reds","Reds","Reds 2","Reds 3","rocket","Rocket","romaO","smoothrainbow","Sunset","SunsetDark","Teal","TealGrn","Terrain","Terrain 2","tokyo","turbo","turku","Turku","vikO","viridis","Viridis","YlGn","YlGn","YlGnBu","YlGnBu","YlOrBr","YlOrBr","YlOrBr","YlOrRd","YlOrRd"],["grDevices","colortheme","khroma","khroma","grDevices","colortheme","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","khroma","grDevices","khroma","khroma","grDevices","khroma","grDevices","grDevices","grDevices","grDevices","khroma","grDevices","grDevices","grDevices","colortheme","khroma","grDevices","khroma","khroma","khroma","grDevices","RColorBrewer","grDevices","khroma","RColorBrewer","grDevices","RColorBrewer","grDevices","grDevices","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","khroma","grDevices","grDevices","RColorBrewer","khroma","grDevices","grDevices","khroma","grDevices","grDevices","khroma","khroma","grDevices","grDevices","grDevices","RColorBrewer","grDevices","khroma","grDevices","grDevices","khroma","grDevices","grDevices","RColorBrewer","khroma","grDevices","grDevices","grDevices","colortheme","khroma","colortheme","khroma","khroma","khroma","khroma","grDevices","khroma","khroma","grDevices","RColorBrewer","khroma","grDevices","grDevices","RColorBrewer","RColorBrewer","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","RColorBrewer","RColorBrewer","colortheme","khroma","khroma","grDevices","colortheme","khroma","grDevices","khroma","grDevices","grDevices","colortheme","khroma","khroma","khroma","grDevices","khroma","khroma","khroma","grDevices","grDevices","RColorBrewer","grDevices","grDevices","colortheme","grDevices","grDevices","khroma","grDevices","khroma","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","grDevices","viridisLite","khroma","grDevices","khroma","khroma","grDevices","khroma","grDevices","RColorBrewer","khroma","grDevices","colortheme","grDevices","grDevices","RColorBrewer","grDevices","grDevices","RColorBrewer","khroma","grDevices","grDevices","grDevices","khroma","khroma","viridisLite","grDevices","khroma","khroma","grDevices","khroma","grDevices","khroma","grDevices","viridisLite","viridisLite","grDevices","grDevices","khroma","khroma","colortheme","khroma","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","khroma","grDevices","grDevices","grDevices","viridisLite","grDevices","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","grDevices","grDevices","grDevices","grDevices","RColorBrewer","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","grDevices","grDevices","viridisLite","grDevices","khroma","khroma","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","khroma","viridisLite","khroma","grDevices","khroma","viridisLite","grDevices","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","khroma","RColorBrewer","grDevices","RColorBrewer"],["diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential"]],"container":"<table class=\"cell-border stripe hover\">\n  <thead>\n    <tr>\n      <th>name<\/th>\n      <th>source<\/th>\n      <th>type<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"lengthMenu":[10,20,50,100],"dom":"Btip","columnDefs":[{"name":"name","targets":0},{"name":"source","targets":1},{"name":"type","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><div class="section level3">
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["ArmyRose","azurerose","bam","berlin","Berlin","Blue-Red","Blue-Red 2","Blue-Red 3","Blue-Yellow 2","Blue-Yellow 3","BrBG","BrBG","broc","Broc","bukavu","BuRd","Cividis","cork","Cork","Cyan-Magenta","Earth","Fall","fes","Geyser","Green-Brown","Green-Orange","kasane","lisbon","Lisbon","managua","nightfall","oleron","PiYG","PiYG","PRGn","PRGn","PRGn","PuOr","PuOr","Purple-Brown","Purple-Green","RdBu","RdBu","RdGy","RdGy","RdYlBu","RdYlBu","RdYlGn","RdYlGn","Red-Green","roma","Roma","Spectral","Spectral","steps","sunset","TealRose","Temps","tofino","Tofino","Tropic","vanimo","vik","Vik","Zissou 1","Accent","Accent","Alphabet","bright","Classic Tableau","Cold","dark","Dark 2","Dark 3","Dark2","discreterainbow","Dynamic","ggplot2","Harmonic","hcl","highcontrast","highlight","land","light","mediumcontrast","muted","Okabe-Ito","okabeito","okabeitoblack","Paired","Paired","pale","Pastel 1","Pastel 2","Pastel1","Pastel2","Polychrome 36","R3","R4","Set 1","Set 2","Set 3","Set1","Set2","Set3","shiki","soil","stratigraphy","Tableau 10","ukiyoe","vibrant","Warm","acton","ag_GrnYl","ag_Sunset","ai","bamako","bamO","batlow","Batlow","batlowK","batlowW","bilbao","Blue-Yellow","Blues","Blues","Blues 2","Blues 3","bluescale","bluesteps","BluGrn","BluYl","brocO","BrwnYl","buda","BuGn","BuGn","BuPu","BuPu","Burg","BurgYl","cividis","corkO","Dark Mint","davos","devon","Emrld","glasgow","GnBu","GnBu","grayC","Grays","grayscale","Green-Yellow","Greens","Greens","Greens 2","Greens 3","Greys","hawaii","Hawaii","Heat","Heat 2","imola","incandescent","inferno","Inferno","iridescent","lajolla","Lajolla","lapaz","Light Grays","lipari","Magenta","magma","mako","Mako","Mint","navia","naviaW","neon","nuuk","Oranges","Oranges","OrRd","OrRd","OrYel","oslo","Oslo","Peach","PinkYl","plasma","Plasma","PuBu","PuBu","PuBuGn","PuBuGn","PuRd","PuRd","Purp","Purple-Blue","Purple-Orange","Purple-Yellow","Purples","Purples","Purples 2","Purples 3","PurpOr","RdPu","RdPu","Red-Blue","Red-Purple","Red-Yellow","RedOr","Reds","Reds","Reds 2","Reds 3","rocket","Rocket","romaO","smoothrainbow","Sunset","SunsetDark","Teal","TealGrn","Terrain","Terrain 2","tokyo","turbo","turku","Turku","vikO","viridis","Viridis","YlGn","YlGn","YlGnBu","YlGnBu","YlOrBr","YlOrBr","YlOrBr","YlOrRd","YlOrRd"],["grDevices","colortheme","khroma","khroma","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","khroma","grDevices","khroma","khroma","grDevices","khroma","grDevices","grDevices","grDevices","grDevices","khroma","grDevices","grDevices","grDevices","colortheme","khroma","grDevices","khroma","khroma","khroma","grDevices","RColorBrewer","grDevices","khroma","RColorBrewer","grDevices","RColorBrewer","grDevices","grDevices","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","khroma","grDevices","grDevices","RColorBrewer","colortheme","khroma","grDevices","grDevices","khroma","grDevices","grDevices","khroma","khroma","grDevices","grDevices","grDevices","RColorBrewer","grDevices","khroma","grDevices","grDevices","khroma","grDevices","grDevices","RColorBrewer","khroma","grDevices","grDevices","grDevices","colortheme","khroma","colortheme","khroma","khroma","khroma","khroma","grDevices","khroma","khroma","grDevices","RColorBrewer","khroma","grDevices","grDevices","RColorBrewer","RColorBrewer","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","RColorBrewer","RColorBrewer","colortheme","khroma","khroma","grDevices","colortheme","khroma","grDevices","khroma","grDevices","grDevices","colortheme","khroma","khroma","khroma","grDevices","khroma","khroma","khroma","grDevices","grDevices","RColorBrewer","grDevices","grDevices","colortheme","colortheme","grDevices","grDevices","khroma","grDevices","khroma","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","grDevices","viridisLite","khroma","grDevices","khroma","khroma","grDevices","khroma","grDevices","RColorBrewer","khroma","grDevices","colortheme","grDevices","grDevices","RColorBrewer","grDevices","grDevices","RColorBrewer","khroma","grDevices","grDevices","grDevices","khroma","khroma","viridisLite","grDevices","khroma","khroma","grDevices","khroma","grDevices","khroma","grDevices","viridisLite","viridisLite","grDevices","grDevices","khroma","khroma","colortheme","khroma","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","khroma","grDevices","grDevices","grDevices","viridisLite","grDevices","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","grDevices","grDevices","grDevices","grDevices","RColorBrewer","grDevices","grDevices","grDevices","grDevices","grDevices","RColorBrewer","grDevices","grDevices","viridisLite","grDevices","khroma","khroma","grDevices","grDevices","grDevices","grDevices","grDevices","grDevices","khroma","viridisLite","khroma","grDevices","khroma","viridisLite","grDevices","grDevices","RColorBrewer","grDevices","RColorBrewer","grDevices","khroma","RColorBrewer","grDevices","RColorBrewer"],["diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","diverging","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","qualitative","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential","sequential"]],"container":"<table class=\"cell-border stripe hover\">\n  <thead>\n    <tr>\n      <th>name<\/th>\n      <th>source<\/th>\n      <th>type<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"lengthMenu":[10,20,50,100],"dom":"Btip","columnDefs":[{"name":"name","targets":0},{"name":"source","targets":1},{"name":"type","targets":2}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script><div class="section level3">
+<h3 id="sequential-color-themes">Sequential Color Themes<a class="anchor" aria-label="anchor" href="#sequential-color-themes"></a>
+</h3>
+<p><img src="colortheme_files/figure-html/sequential_gallery-1.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-2.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-3.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-4.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-5.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-6.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-7.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-8.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-9.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-10.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-11.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-12.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-13.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-14.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-15.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-16.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-17.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-18.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-19.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-20.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-21.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-22.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-23.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-24.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-25.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-26.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-27.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-28.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-29.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-30.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-31.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-32.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-33.png" class="r-plt" alt="" width="576"></p>
+</div>
+<div class="section level3">
 <h3 id="diverging-color-themes">Diverging Color Themes<a class="anchor" aria-label="anchor" href="#diverging-color-themes"></a>
 </h3>
 <p><img src="colortheme_files/figure-html/diverging_gallery-1.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-2.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-3.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-4.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-5.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-6.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-7.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-8.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-9.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-10.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-11.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-12.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-13.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-14.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-15.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-16.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/diverging_gallery-17.png" class="r-plt" alt="" width="576"></p>
@@ -466,11 +675,6 @@ you have already installed the <strong>viridisLite</strong>,
 <h3 id="qualitative-color-themes">Qualitative Color Themes<a class="anchor" aria-label="anchor" href="#qualitative-color-themes"></a>
 </h3>
 <p><img src="colortheme_files/figure-html/qualitative_gallery-1.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-2.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-3.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-4.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-5.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-6.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-7.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-8.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-9.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-10.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-11.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/qualitative_gallery-12.png" class="r-plt" alt="" width="576"></p>
-</div>
-<div class="section level3">
-<h3 id="sequential-color-themes">Sequential Color Themes<a class="anchor" aria-label="anchor" href="#sequential-color-themes"></a>
-</h3>
-<p><img src="colortheme_files/figure-html/sequential_gallery-1.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-2.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-3.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-4.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-5.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-6.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-7.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-8.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-9.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-10.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-11.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-12.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-13.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-14.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-15.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-16.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-17.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-18.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-19.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-20.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-21.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-22.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-23.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-24.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-25.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-26.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-27.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-28.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-29.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-30.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-31.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-32.png" class="r-plt" alt="" width="576"><img src="colortheme_files/figure-html/sequential_gallery-33.png" class="r-plt" alt="" width="576"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
