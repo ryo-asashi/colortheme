@@ -8,7 +8,8 @@
   : Color Themes for Graphics
 - [`colorthemes()`](https://ryo-asashi.github.io/colortheme/reference/colorthemes.md)
   [`register_colortheme()`](https://ryo-asashi.github.io/colortheme/reference/colorthemes.md)
-  : List and Register Color Themes
+  [`colortheme_options()`](https://ryo-asashi.github.io/colortheme/reference/colorthemes.md)
+  : List, Register, and Configure Color Themes
 - [`as_palette()`](https://ryo-asashi.github.io/colortheme/reference/as_palette.md)
   [`as_ramp()`](https://ryo-asashi.github.io/colortheme/reference/as_palette.md)
   : Extract Palette or Ramp Function

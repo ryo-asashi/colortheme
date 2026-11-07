@@ -1,8 +1,9 @@
-# List and Register Color Themes
+# List, Register, and Configure Color Themes
 
 `colorthemes()` returns a data frame listing available color themes in
 the registry. `register_colortheme()` registers a custom color theme
-into the registry.
+into the registry. `colortheme_options()` sets or retrieves global
+package options.
 
 ## Usage
 
@@ -18,6 +19,8 @@ register_colortheme(
   type = NULL,
   env = NULL
 )
+
+colortheme_options(...)
 ```
 
 ## Arguments
@@ -58,6 +61,12 @@ register_colortheme(
 
   a list of option values controlling the color theme's behavior.
 
+- ...:
+
+  for `colortheme_options()`, options to be defined in `name = value`
+  form, a single named list of options, or character strings specifying
+  option names to retrieve.
+
 ## Value
 
 - `colorthemes()`: A data frame with columns `"name"`, `"source"`, and
@@ -65,6 +74,10 @@ register_colortheme(
 
 - `register_colortheme()`: Invisibly returns the metadata of the
   previous theme that was overwritten (or `NULL` if none existed).
+
+- `colortheme_options()`: A named list of current option values (when
+  called with no arguments or character strings), or invisibly a named
+  list of previous values (when setting options).
 
 ## Details
 
@@ -79,6 +92,12 @@ keep the registry lightweight, the `kernel` argument supports lazy
 loading: pass a character vector or list of length 2 where the first
 element is an R expression returning a kernel (e.g., `"rainbow"`) and
 the second is the namespace (e.g., `"grDevices"`).
+
+`colortheme_options()` provides a scoped interface to R's global
+[`options()`](https://rdrr.io/r/base/options.html), automatically
+prefixing option names with `colortheme.`. Supported options are
+`"sequential"`, `"diverging"`, `"qualitative"` (default theme names or
+objects), and `"registry"` (the active registry environment).
 
 ## See also
 
@@ -106,7 +125,7 @@ colorthemes(name = "ma")
 #> 4   magma viridisLite sequential
 #> 5    mako viridisLite sequential
 
-# Register a custom theme
+# Register a custom theme and remove it afterward
 register_colortheme(
   kernel = c("#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"),
   name = "sand", source = "custom", type = "sequential"
@@ -114,7 +133,26 @@ register_colortheme(
 colorthemes(name = "sand")
 #>   name source       type
 #> 1 sand custom sequential
-
-# Remove the custom theme by passing NULL
 register_colortheme(NULL, name = "sand", source = "custom")
+
+# View, modify, and restore global options
+colortheme_options()
+#> $diverging
+#> [1] "azurerose"
+#> 
+#> $qualitative
+#> [1] "hcl"
+#> 
+#> $registry
+#> <environment: 0x5e837c979720>
+#> 
+#> $sequential
+#> [1] "bluescale"
+#> 
+old <- colortheme_options(sequential = "Viridis")
+colortheme_options("sequential")
+#> $sequential
+#> [1] "Viridis"
+#> 
+colortheme_options(old)
 ```
