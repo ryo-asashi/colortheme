@@ -188,9 +188,12 @@ modifications:
 # Retrieve a pre-defined theme
 ct <- colortheme("Mako")
 print(ct)
-#> Sequential Color Theme: 'Mako'
+#> Sequential Color Theme: 'Mako' (from 'grDevices')
 #> 
 #> Kernel Class: palette
+#> 
+#> Kernel Function:
+#> function (n, palette = "viridis", alpha = NULL, rev = FALSE, fixup = TRUE)
 #> 
 #> Options:
 #>   kernel.size      : Inf

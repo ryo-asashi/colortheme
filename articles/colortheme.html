@@ -118,9 +118,12 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <span><span class="co"># diverging color theme "azurerose" (package:colortheme)</span></span>
 <span><span class="va">azurerose</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"azurerose"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">azurerose</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Diverging Color Theme: 'azurerose'</span></span>
+<span><span class="co">#&gt; Diverging Color Theme: 'azurerose' (from 'colortheme')</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #005AAD, #3B78C2, #729BD6, #AFC4E8, #F7F7F7, #E8B3CC, #D67FA8, #BD4989, #A4136E</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Options:</span></span>
 <span><span class="co">#&gt;   kernel.size      : 9L</span></span>
@@ -158,9 +161,12 @@ providing a theme name to the <code><a href="../reference/colortheme.html">color
 <code class="sourceCode R"><span><span class="co"># sequential color theme "viridis" (package:viridisLite)</span></span>
 <span><span class="va">viridis</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"viridis"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">viridis</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sequential Color Theme: 'viridis'</span></span>
+<span><span class="co">#&gt; Sequential Color Theme: 'viridis' (from 'viridisLite')</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: palette</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Function:</span></span>
+<span><span class="co">#&gt; function (n, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Options:</span></span>
 <span><span class="co">#&gt;   kernel.size      : Inf</span></span>
@@ -272,6 +278,9 @@ by passing a custom color vector or function to the first argument of
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: color</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #003f5c, #7a5195, #ef5675, #ffa600</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Options:</span></span>
 <span><span class="co">#&gt;   kernel.size      : 4L</span></span>
 <span><span class="co">#&gt;   palette.formatter: "interpolate"</span></span>
@@ -311,9 +320,12 @@ by passing a custom color vector or function to the first argument of
 <span>  name <span class="op">=</span> <span class="st">"rainbow"</span>, source <span class="op">=</span> <span class="st">"grDevices"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rainbow</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sequential Color Theme: 'rainbow'</span></span>
+<span><span class="co">#&gt; Sequential Color Theme: 'rainbow' (from 'grDevices')</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: palette</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Function:</span></span>
+<span><span class="co">#&gt; function (n, s = 1, v = 1, start = 0, end = max(1, n - 1)/n, alpha, rev = FALSE)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Options:</span></span>
 <span><span class="co">#&gt;   kernel.size      : Inf</span></span>
@@ -349,9 +361,12 @@ function.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/colorthemes.html">register_colortheme</a></span><span class="op">(</span><span class="va">mytheme</span>, name <span class="op">=</span> <span class="st">"mytheme"</span>, source <span class="op">=</span> <span class="st">"custom"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"mytheme_r@div"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Diverging Color Theme: 'mytheme'</span></span>
+<span><span class="co">#&gt; Diverging Color Theme: 'mytheme' (from 'custom')</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #ffa600, #ef5675, #7a5195, #003f5c</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Options:</span></span>
 <span><span class="co">#&gt;   kernel.size      : 4L</span></span>
@@ -367,9 +382,12 @@ function.</p>
 <p><img src="colortheme_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="" width="576"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/colortheme.html">colortheme</a></span><span class="op">(</span><span class="st">"custom/mytheme@q"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Qualitative Color Theme: 'mytheme'</span></span>
+<span><span class="co">#&gt; Qualitative Color Theme: 'mytheme' (from 'custom')</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Kernel Class: color</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Kernel Colors:</span></span>
+<span><span class="co">#&gt; #003f5c, #7a5195, #ef5675, #ffa600</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Options:</span></span>
 <span><span class="co">#&gt;   kernel.size      : 4L</span></span>

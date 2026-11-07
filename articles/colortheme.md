@@ -26,9 +26,12 @@ library(colortheme)
 # diverging color theme "azurerose" (package:colortheme)
 azurerose <- colortheme("azurerose")
 print(azurerose)
-#> Diverging Color Theme: 'azurerose'
+#> Diverging Color Theme: 'azurerose' (from 'colortheme')
 #> 
 #> Kernel Class: color
+#> 
+#> Kernel Colors:
+#> #005AAD, #3B78C2, #729BD6, #AFC4E8, #F7F7F7, #E8B3CC, #D67FA8, #BD4989, #A4136E
 #> 
 #> Options:
 #>   kernel.size      : 9L
@@ -62,9 +65,12 @@ azurerose$ramp(c(0.00, 0.25, 0.50, 0.75, 1.00))
 # sequential color theme "viridis" (package:viridisLite)
 viridis <- colortheme("viridis")
 print(viridis)
-#> Sequential Color Theme: 'viridis'
+#> Sequential Color Theme: 'viridis' (from 'viridisLite')
 #> 
 #> Kernel Class: palette
+#> 
+#> Kernel Function:
+#> function (n, alpha = 1, begin = 0, end = 1, direction = 1, option = "D")
 #> 
 #> Options:
 #>   kernel.size      : Inf
@@ -186,6 +192,9 @@ print(mytheme)
 #> 
 #> Kernel Class: color
 #> 
+#> Kernel Colors:
+#> #003f5c, #7a5195, #ef5675, #ffa600
+#> 
 #> Options:
 #>   kernel.size      : 4L
 #>   palette.formatter: "interpolate"
@@ -221,9 +230,12 @@ rainbow <- colortheme(
   name = "rainbow", source = "grDevices"
 )
 print(rainbow)
-#> Sequential Color Theme: 'rainbow'
+#> Sequential Color Theme: 'rainbow' (from 'grDevices')
 #> 
 #> Kernel Class: palette
+#> 
+#> Kernel Function:
+#> function (n, s = 1, v = 1, start = 0, end = max(1, n - 1)/n, alpha, rev = FALSE)
 #> 
 #> Options:
 #>   kernel.size      : Inf
@@ -257,9 +269,12 @@ function.
 
 register_colortheme(mytheme, name = "mytheme", source = "custom")
 colortheme("mytheme_r@div")
-#> Diverging Color Theme: 'mytheme'
+#> Diverging Color Theme: 'mytheme' (from 'custom')
 #> 
 #> Kernel Class: color
+#> 
+#> Kernel Colors:
+#> #ffa600, #ef5675, #7a5195, #003f5c
 #> 
 #> Options:
 #>   kernel.size      : 4L
@@ -279,9 +294,12 @@ colortheme("mytheme_r@div")
 ``` r
 
 colortheme("custom/mytheme@q")
-#> Qualitative Color Theme: 'mytheme'
+#> Qualitative Color Theme: 'mytheme' (from 'custom')
 #> 
 #> Kernel Class: color
+#> 
+#> Kernel Colors:
+#> #003f5c, #7a5195, #ef5675, #ffa600
 #> 
 #> Options:
 #>   kernel.size      : 4L
