@@ -1,7 +1,7 @@
 Package: colortheme
 Type: Package
 Title: A Unified Framework and Interface for Color Palettes and Ramps
-Version: 0.1.0
+Version: 0.1.0.900
 Authors@R: c(
     person("Ryoichi", "Asashiba", email = "ryoichi.asashiba@gmail.com",
            role = c("aut", "cre"), comment = c(ORCID = "0009-0001-9532-7000"))

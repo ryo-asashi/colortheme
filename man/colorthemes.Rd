@@ -3,7 +3,8 @@
 \name{colorthemes}
 \alias{colorthemes}
 \alias{register_colortheme}
-\title{List and Register Color Themes}
+\alias{colortheme_options}
+\title{List, Register, and Configure Color Themes}
 \usage{
 colorthemes(name = NULL, source = NULL, type = NULL, env = NULL)
 
@@ -16,6 +17,8 @@ register_colortheme(
   type = NULL,
   env = NULL
 )
+
+colortheme_options(...)
 }
 \arguments{
 \item{name}{for \code{colorthemes()}, a character vector of theme names to match (case-insensitive prefix matching). For \code{register_colortheme()}, a single string for the new theme name.}
@@ -31,22 +34,28 @@ register_colortheme(
 \item{kernel.args}{a list of arguments passed to the color kernel.}
 
 \item{options}{a list of option values controlling the color theme's behavior.}
+
+\item{...}{for \code{colortheme_options()}, options to be defined in \code{name = value} form, a single named list of options, or character strings specifying option names to retrieve.}
 }
 \value{
 \itemize{
 \item \code{colorthemes()}: A data frame with columns \code{"name"}, \code{"source"}, and \code{"type"}.
 \item \code{register_colortheme()}: Invisibly returns the metadata of the previous theme that was overwritten (or \code{NULL} if none existed).
+\item \code{colortheme_options()}: A named list of current option values (when called with no arguments or character strings), or invisibly a named list of previous values (when setting options).
 }
 }
 \description{
 \code{colorthemes()} returns a data frame listing available color themes in the registry.
 \code{register_colortheme()} registers a custom color theme into the registry.
+\code{colortheme_options()} sets or retrieves global package options.
 }
 \details{
 \code{colorthemes()} extracts metadata from the registry environment and structures it into a data frame, allowing users to discover themes by \code{name}, \code{source}, and \code{type} (with case-insensitive prefix matching).
 
 \code{register_colortheme()} takes a color vector, a color-generating function, or an existing \code{"colortheme"} object and registers it under a specified \code{name} and \code{source} (defaulting to \code{"custom/newtheme"}).
 To keep the registry lightweight, the \code{kernel} argument supports lazy loading: pass a character vector or list of length 2 where the first element is an R expression returning a kernel (e.g., \code{"rainbow"}) and the second is the namespace (e.g., \code{"grDevices"}).
+
+\code{colortheme_options()} provides a scoped interface to R's global \code{\link[base]{options}()}, automatically prefixing option names with \code{colortheme.}. Supported options are \code{"sequential"}, \code{"diverging"}, \code{"qualitative"} (default theme names or objects), and \code{"registry"} (the active registry environment).
 }
 \examples{
 # List all available themes
@@ -55,15 +64,19 @@ head(colorthemes())
 # Case-insensitive prefix matching
 colorthemes(name = "ma")
 
-# Register a custom theme
+# Register a custom theme and remove it afterward
 register_colortheme(
   kernel = c("#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"),
   name = "sand", source = "custom", type = "sequential"
 )
 colorthemes(name = "sand")
-
-# Remove the custom theme by passing NULL
 register_colortheme(NULL, name = "sand", source = "custom")
+
+# View, modify, and restore global options
+colortheme_options()
+old <- colortheme_options(sequential = "Viridis")
+colortheme_options("sequential")
+colortheme_options(old)
 }
 \seealso{
 \code{\link{colortheme}}
