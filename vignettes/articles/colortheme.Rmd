@@ -79,11 +79,11 @@ You can modify themes by **reversing** the color order or **changing** the theme
 1. **Using Arguments** : provide the appropriate argument to the function, such as `reverse = TRUE` or `type = "qualitative"`.
 2. **Using Suffixes** : for convenience, you can append a suffix directly to the theme's name. `_r` to reverse the theme, `@q` (or longer, such as `@qual`) to make the theme qualitative (`@d` for diverging, `@s` for sequential).
 
-```{r, fig.height = 1.2, fig.width = 6, echo = FALSE}
+```{r, fig.height = 1.2, fig.width = 6}
 colortheme("azurerose", reverse = TRUE, type = "q")
 ```
 
-```{r, fig.height = 1.2, fig.width = 6, echo = FALSE}
+```{r, fig.height = 1.2, fig.width = 6}
 colortheme("azurerose_r@qualitative")
 ```
 
