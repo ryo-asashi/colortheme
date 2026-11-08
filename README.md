@@ -91,7 +91,7 @@ ct <- colortheme("Viridis")
 ct$palette(5L)
 #> [1] "#4B0055" "#00588B" "#009B95" "#53CC67" "#FDE333"
 ct$ramp(seq.int(0, 1, length.out = 5))
-#> [1] "#4B0054" "#00578A" "#009B94" "#53CC66" "#FDE333"
+#> [1] "#4B0055" "#00588B" "#009B95" "#53CC67" "#FDE333"
 
 # Use query syntax for on-the-fly modifications
 ct_custom <- colortheme("grDevices/Zissou 1_r@qual?alpha=0.75")
@@ -113,7 +113,7 @@ pal(6L)
 # Extract a continuous ramp function taking x in [0, 1]
 ramp <- as_ramp("bluescale")
 ramp(c(0, 0.5, 1.0))
-#> [1] "#132B43" "#326A97" "#55B1F7"
+#> [1] "#132B43" "#336A98" "#56B1F7"
 ```
 
 ### 3. Direct Mapping for Base R Graphics (`map_to_colors()`)
@@ -212,7 +212,7 @@ ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
   scale_fill_theme("Temps?ramp.steps=12L", middle = 0.02)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-stepwise-themes-1.png" width="100%" />
 
 ``` r
 
@@ -222,13 +222,14 @@ ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
   scale_fill_theme("ukiyoe@s")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />
+<img src="man/figures/README-stepwise-themes-2.png" width="100%" />
 
 ## Function Reference
 
 - **Theme Construction & Modification**: `colortheme()`, `as_palette()`,
   `as_ramp()`
-- **Registry & Discovery**: `colorthemes()`, `register_colortheme()`
+- **Registry & Discovery**: `colorthemes()`, `register_colortheme()`,
+  `colortheme_options()`
 - **Base R Mapping**: `map_to_colors()`
 - **ggplot2 Scales**: `scale_color_theme()`, `scale_colour_theme()`,
   `scale_fill_theme()`

@@ -268,7 +268,7 @@ colors_to_ramp <- function(colors) {
     if (all(ng)) return(res)
     x[!ng] <- pmin(1, pmax(0, x[!ng]))
     if (direction < 0) x[!ng] <- 1 - x[!ng]
-    args <- as.data.frame(.Ramp(x[!ng]))
+    args <- as.data.frame(round(.Ramp(x[!ng])))
     if (!is.null(alpha)) args[[4L]] <- max(min(alpha, 1), 0) * 255
     names(args) <- c("red", "green", "blue", "alpha")[seq_len(length(args))]
     args$maxColorValue <- 255

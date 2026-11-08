@@ -40,12 +40,13 @@ test_that("colortheme() retrieves built-in themes and parses URL-like query synt
   ct_azurerose <- colortheme("azurerose")
   expect_equal(ct_azurerose$type, "diverging")
   expect_equal(ct_azurerose$name, "azurerose")
+  expect_equal(ct_azurerose$source, "colortheme")
 
   ct_hcl <- colortheme("hcl")
   expect_equal(ct_hcl$type, "qualitative")
   expect_length(ct_hcl$palette(6L), 6L)
 
-  # Syntax: source/name_r@type?query
+  # Syntax: source/name_r@type?query (supports both ';' and '&' delimiters)
   ct_syn <- colortheme("grDevices/Zissou 1_r@qual?alpha=0.5;na.color='#000000'")
   expect_equal(ct_syn$name, "Zissou 1")
   expect_equal(ct_syn$source, "grDevices")
@@ -69,11 +70,54 @@ test_that("colortheme() retrieves built-in themes and parses URL-like query synt
   expect_error(colortheme("azurerose?invalid_query_no_equals"), "can't be parsed")
 })
 
+test_that("programmable 'highlight' theme and stepped ramps (ramp.steps / 'steps') work", {
+  # 1. 'highlight' with group list, negative index (-1 = last), and out-of-bounds safety
+  ct_hl <- colortheme("highlight?which=list(1:2, -1, 99)")
+  pal_hl <- ct_hl$palette(5L)
+  expect_equal(pal_hl[1:2], c("#D64550", "#D64550"))
+  expect_equal(pal_hl[3:4], c("#BFBFBF", "#BFBFBF"))
+  expect_equal(pal_hl[5L], "#2B5C8F")
+  expect_equal(ct_hl$palette(0L), character(0L))
+
+  # Reversing 'highlight' reverses accent color order
+  ct_hl_r <- colortheme("highlight_r?which=1")
+  expect_equal(ct_hl_r$palette(2L), c("#2A9D8F", "#BFBFBF"))
+
+  # 2. Stepped ramp via integer ramp.steps (k equal intervals)
+  ct_step2 <- colortheme(c("#000000", "#FFFFFF"), options = list(ramp.steps = 2L))
+  expect_equal(
+    ct_step2$ramp(c(0.1, 0.4, 0.6, 0.9)),
+    c("#000000", "#000000", "#FFFFFF", "#FFFFFF")
+  )
+
+  # 3. Stepped ramp via custom cutoffs in (0, 1)
+  ct_cut <- colortheme(
+    c("#0000FF", "#888888", "#FF0000"),
+    options = list(ramp.steps = c(0.25, 0.75))
+  )
+  expect_equal(
+    ct_cut$ramp(c(0.1, 0.5, 0.9)),
+    c("#0000FF", "#888888", "#FF0000")
+  )
+
+  # 4. Built-in stepped themes ('steps' and 'bluesteps')
+  ct_steps <- colortheme("steps")
+  expect_equal(ct_steps$type, "diverging")
+  expect_equal(ct_steps$options$ramp.steps, 11L)
+
+  ct_bsteps <- colortheme("bluesteps")
+  expect_equal(ct_bsteps$type, "sequential")
+  expect_equal(ct_bsteps$options$ramp.steps, 11L)
+})
+
 test_that("colortheme modification, subset assignment, and formatting options work", {
   ct <- colortheme(c("#000000", "#FFFFFF"), type = "qualitative")
   expect_equal(ct$options$palette.formatter, "recycle")
   # Recycle when n > kernel.size (2)
   expect_equal(ct$palette(4L), c("#000000", "#FFFFFF", "#000000", "#FFFFFF"))
+
+  # Qualitative theme defaults to stepped ramp
+  expect_equal(ct$ramp(c(0.1, 0.9)), c("#000000", "#FFFFFF"))
 
   # Switching type updates default mode and formatter automatically
   ct_seq <- colortheme(ct, type = "sequential")
@@ -115,13 +159,24 @@ test_that("print.colortheme and plot.colortheme execute cleanly", {
   pdf(NULL)
   on.exit(dev.off(), add = TRUE)
 
-  expect_output(res <- print(ct_seq, display = TRUE), "Sequential Color Theme: 'bluescale'")
+  expect_output(
+    res <- print(ct_seq, display = TRUE),
+    "Sequential Color Theme: 'bluescale' \\(from 'colortheme'\\)"
+  )
+  expect_output(print(ct_seq, display = FALSE), "Kernel Colors:")
   expect_identical(res, ct_seq)
-  expect_output(print(ct_qual, display = FALSE), "Qualitative Color Theme: 'hcl'")
+  expect_output(
+    print(ct_qual, display = FALSE),
+    "Qualitative Color Theme: 'hcl' \\(from 'colortheme'\\)"
+  )
+  expect_output(print(ct_qual, display = FALSE), "Kernel Function:")
   expect_invisible(plot(ct_qual, n = 6L))
 })
 
-test_that("register_colortheme(), colorthemes(), and init_colorthemes() manage registry", {
+test_that("register_colortheme(), colorthemes(), and colortheme_options() work", {
+  old_opts <- options()
+  on.exit(options(old_opts), add = TRUE)
+
   tmp_env <- new.env(parent = emptyenv())
 
   # Empty registry returns 0-row data.frame with exact schema
@@ -148,6 +203,11 @@ test_that("register_colortheme(), colorthemes(), and init_colorthemes() manage r
   expect_equal(nrow(colorthemes(env = tmp_env, name = "BW", source = "test", type = "div")), 1L)
   expect_equal(nrow(colorthemes(env = tmp_env, name = "unknown")), 0L)
 
+  # Remove registered theme by passing NULL
+  removed <- register_colortheme(NULL, name = "bwr", source = "test_src", env = tmp_env)
+  expect_equal(removed$name, "bwr")
+  expect_equal(nrow(colorthemes(env = tmp_env)), 0L)
+
   # Validation errors in register_colortheme
   expect_error(register_colortheme(c("red", "blue"), name = "bad/name", env = tmp_env), "reserved")
   expect_error(register_colortheme(c("red", "blue"), name = "bad_r", env = tmp_env), "reserved")
@@ -157,13 +217,20 @@ test_that("register_colortheme(), colorthemes(), and init_colorthemes() manage r
   # Initialize full suite into temporary environment and clear
   init_colortheme(env = tmp_env, clear.env = TRUE)
   expect_gt(nrow(colorthemes(env = tmp_env)), 10L)
+
+  # colortheme_options() get, set, restore via list, and warn on typos
+  prev <- colortheme_options(sequential = "Viridis")
+  expect_equal(colortheme_options("sequential")$sequential, "Viridis")
+  colortheme_options(prev)
+  expect_equal(colortheme_options("sequential")$sequential, prev$sequential)
+  expect_warning(colortheme_options(unknown_key = 123), "typo|unrecognized")
 })
 
 test_that("map_to_colors() maps discrete and continuous values accurately", {
   # Continuous sequential
   x_num <- c(0, 5, 10, NA)
   c_seq <- map_to_colors(x_num, theme = c("#000000", "#FFFFFF"), na.value = "#FF0000")
-  expect_equal(c_seq, c("#000000", "#767676", "#FFFFFF", "#FF0000"))
+  expect_equal(c_seq, c("#000000", "#777777", "#FFFFFF", "#FF0000"))
 
   # Continuous diverging with middle = 0
   x_div <- c(-10, 0, 5)
@@ -178,12 +245,18 @@ test_that("map_to_colors() maps discrete and continuous values accurately", {
 
   # Discrete mapping (character, factor, logical)
   x_chr <- c("A", "B", "A", NA)
-  c_qual <- map_to_colors(x_chr, theme = colortheme(c("#111111", "#222222"), type = "qualitative"), na.value = "#999999")
+  c_qual <- map_to_colors(
+    x_chr,
+    theme = colortheme(c("#111111", "#222222"), type = "qualitative"),
+    na.value = "#999999"
+  )
   expect_equal(c_qual, c("#111111", "#222222", "#111111", "#999999"))
 
-  # Qualitative theme for continuous variable treated as discrete
-  c_disc <- map_to_colors(1:5, theme = "hcl", disc = TRUE)
+  # Qualitative theme on factor / continuous variable
+  c_disc <- map_to_colors(factor(1:5), theme = "hcl")
   expect_equal(c_disc, c("#F8766D", "#A3A500", "#00BF7D", "#00B0F6", "#E76BF3"))
+  c_q_cont <- map_to_colors(c(0, 1), theme = colortheme(c("#111111", "#222222"), type = "qualitative"))
+  expect_equal(c_q_cont, c("#111111", "#222222"))
 })
 
 test_that("scale_color_theme() and scale_fill_theme() construct ggplot2 scales", {
@@ -204,8 +277,9 @@ test_that("scale_color_theme() and scale_fill_theme() construct ggplot2 scales",
   s_forced <- scale_color_theme("bluescale", discrete = TRUE)
   expect_s3_class(s_forced, "ScaleDiscrete")
 
-  # Qualitative theme on continuous scale throws error
-  expect_no_error(scale_color_theme("hcl", discrete = FALSE))
+  # Force qualitative theme onto continuous scale (stepped ramp, no error)
+  s_q_cont <- scale_color_theme("hcl", discrete = FALSE)
+  expect_s3_class(s_q_cont, "ScaleContinuous")
 })
 
 test_that("as_palette() and as_ramp() extract color-generating functions", {

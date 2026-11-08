@@ -147,7 +147,7 @@ ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
 
 - **Stepped / Binned Ramps (`?ramp.steps=...`)**: Any theme can be converted into a stepped ramp by setting `ramp.steps` to an integer $k$ (for $k$ equal bins) or a numeric vector of cutoffs in $(0, 1)$.
 
-```{r}
+```{r, stepwise-themes, warning = FALSE, message = FALSE}
 # Step-wise diverging scale (quantize 'Temps' into 12 discrete bands)
 ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
   geom_tile() +
@@ -162,6 +162,6 @@ ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
 ## Function Reference
 
 - **Theme Construction & Modification**: `colortheme()`, `as_palette()`, `as_ramp()`
-- **Registry & Discovery**: `colorthemes()`, `register_colortheme()`
+- **Registry & Discovery**: `colorthemes()`, `register_colortheme()`, `colortheme_options()`
 - **Base R Mapping**: `map_to_colors()`
 - **ggplot2 Scales**: `scale_color_theme()`, `scale_colour_theme()`, `scale_fill_theme()`
