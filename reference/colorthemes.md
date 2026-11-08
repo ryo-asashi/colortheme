@@ -144,7 +144,7 @@ colortheme_options()
 #> [1] "hcl"
 #> 
 #> $registry
-#> <environment: 0x5e4aadf9f438>
+#> <environment: 0x6180776c2be0>
 #> 
 #> $sequential
 #> [1] "bluescale"

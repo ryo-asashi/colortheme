@@ -55,14 +55,14 @@ The palette and ramp functions are accessible via `$` operator.
 ``` r
 
 azurerose$palette(5)
-#> [1] "#0059AC" "#729AD6" "#F7F7F7" "#D67FA7" "#A4136D"
+#> [1] "#005AAD" "#729BD6" "#F7F7F7" "#D67FA8" "#A4136E"
 ```
 
 ``` r
 
 azurerose$ramp(seq.int(0, 1, by = 0.1))
-#>  [1] "#0059AC" "#3371BD" "#5E8CCE" "#8BABDD" "#BDCDEB" "#F7F7F7" "#EBC0D4"
-#>  [8] "#DD93B6" "#CC6A9B" "#B84083" "#A4136D"
+#>  [1] "#005AAD" "#3372BE" "#5E8DCE" "#8BABDD" "#BECEEB" "#F7F7F7" "#ECC1D4"
+#>  [8] "#DE94B6" "#CC6A9B" "#B84084" "#A4136E"
 ```
 
 ``` r
@@ -111,8 +111,8 @@ as_palette(viridis)(5)
 ``` r
 
 as_ramp(viridis)(seq.int(0, 1, by = 0.1))
-#>  [1] "#404486" "#39548C" "#32658D" "#2C728D" "#26818D" "#21908C" "#1F9F87"
-#>  [8] "#26AC80" "#39B976" "#57C665" "#79D151"
+#>  [1] "#414487" "#3A548C" "#32658E" "#2C738E" "#26828E" "#21918C" "#1F9F88"
+#>  [8] "#26AD81" "#3ABA76" "#58C666" "#7AD151"
 ```
 
 You can modify themes by **reversing** the color order or **changing**
@@ -404,14 +404,14 @@ print(mytheme)
 ``` r
 
 as_palette(mytheme)(5)
-#> [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"
+#> [1] "#003F5C" "#624E86" "#B85585" "#F46C63" "#FFA600"
 ```
 
 ``` r
 
 as_ramp(mytheme)(seq.int(0, 1, by = 0.1))
-#>  [1] "#003F5B" "#33456C" "#534B7D" "#704F8F" "#94528E" "#B85485" "#D9557B"
-#>  [8] "#F15F6E" "#F77857" "#FB8F3B" "#FFA500"
+#>  [1] "#003F5C" "#33466D" "#534B7E" "#70508F" "#94538F" "#B85585" "#D9567C"
+#>  [8] "#F15F6E" "#F77958" "#FC903C" "#FFA600"
 ```
 
 ``` r
@@ -450,8 +450,8 @@ as_palette(rainbow)(5)
 ``` r
 
 as_ramp(rainbow)(seq.int(0, 1, by = 0.1))
-#>  [1] "#FF0000" "#FF9800" "#CCFF00" "#35FF00" "#00FF64" "#00FFFB" "#006AFF"
-#>  [8] "#2F00FF" "#C600FF" "#FF009D" "#FF0006"
+#>  [1] "#FF0000" "#FF9800" "#CDFF00" "#35FF00" "#00FF64" "#00FFFC" "#006AFF"
+#>  [8] "#2F00FF" "#C700FF" "#FF009E" "#FF0006"
 ```
 
 You can register a custom theme to call it by name later in your current

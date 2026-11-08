@@ -222,7 +222,7 @@ It acts as a generic dispatcher that can retrieve a pre-defined theme by name, c
 <span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"</span>
 <span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">ramp</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq.int</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#060606" "#42345F" "#007FA7" "#48C2B3" "#DFF7E0"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#070707" "#423560" "#0080A8" "#48C2B4" "#E0F7E1"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use special syntax to get a reversed, qualitative theme with alpha</span></span></span>
 <span class="r-in"><span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu">colortheme</span><span class="op">(</span><span class="st">"grDevices/Zissou 1_r@qual?alpha=0.75"</span><span class="op">)</span></span></span>
@@ -232,7 +232,7 @@ It acts as a generic dispatcher that can retrieve a pre-defined theme by name, c
 <span class="r-in"><span><span class="co"># Create a new theme from a vector of colors</span></span></span>
 <span class="r-in"><span><span class="va">ct</span> <span class="op">&lt;-</span> <span class="fu">colortheme</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#003f5c"</span>, <span class="st">"#7a5195"</span>, <span class="st">"#ef5675"</span>, <span class="st">"#ffa600"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ct</span><span class="op">$</span><span class="fu">palette</span><span class="op">(</span><span class="fl">5L</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "#003F5C" "#624E86" "#B85585" "#F46C63" "#FFA600"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Modify an existing theme</span></span></span>
 <span class="r-in"><span><span class="va">ct2</span> <span class="op">&lt;-</span> <span class="fu">colortheme</span><span class="op">(</span><span class="va">ct</span>, type <span class="op">=</span> <span class="st">"qualitative"</span>, reverse <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>

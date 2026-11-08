@@ -213,7 +213,7 @@ print(ct)
 ct$palette(5L)
 #> [1] "#070707" "#423460" "#007FA8" "#48C2B4" "#E0F7E1"
 ct$ramp(seq.int(0, 1, length.out = 5))
-#> [1] "#060606" "#42345F" "#007FA7" "#48C2B3" "#DFF7E0"
+#> [1] "#070707" "#423560" "#0080A8" "#48C2B4" "#E0F7E1"
 
 # Use special syntax to get a reversed, qualitative theme with alpha
 ct <- colortheme("grDevices/Zissou 1_r@qual?alpha=0.75")
@@ -223,7 +223,7 @@ ct$palette(5L)
 # Create a new theme from a vector of colors
 ct <- colortheme(c("#003f5c", "#7a5195", "#ef5675", "#ffa600"))
 ct$palette(5L)
-#> [1] "#003F5B" "#614D86" "#B85485" "#F46C63" "#FFA500"
+#> [1] "#003F5C" "#624E86" "#B85585" "#F46C63" "#FFA600"
 
 # Modify an existing theme
 ct2 <- colortheme(ct, type = "qualitative", reverse = TRUE)
