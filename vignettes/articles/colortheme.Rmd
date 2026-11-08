@@ -181,7 +181,7 @@ p <- ggplot(dataset) + geom_point(aes(carat, price, col = color))
 p + scale_color_theme("shiki")
 p + scale_color_theme("viridisLite/mako", discrete = TRUE)
 p + scale_color_theme("tokyo@qual")
-p + scale_color_theme("highlight?which=list(1, 6:7);base='00000000'")
+p + scale_color_theme("highlight?which=list(1, 6:7);base='transparent'")
 ```
 
 ```{r, fig.width = 6, fig.height = 4, warning = FALSE}
