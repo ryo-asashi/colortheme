@@ -128,49 +128,55 @@ two ways:
     longer, such as `@qual`) to make the theme qualitative (`@d` for
     diverging, `@s` for sequential).
 
-&nbsp;
+``` r
 
-    #> Qualitative Color Theme: 'azurerose' (from 'colortheme')
-    #> 
-    #> Kernel Class: color
-    #> 
-    #> Kernel Colors:
-    #> #A4136E, #BD4989, #D67FA8, #E8B3CC, #F7F7F7, #AFC4E8, #729BD6, #3B78C2, #005AAD
-    #> 
-    #> Options:
-    #>   kernel.size      : 9L
-    #>   palette.formatter: "recycle"
-    #>   palette.reverse  : FALSE
-    #>   ramp.rescaler    : c(0, 1)
-    #>   ramp.steps       : Inf
-    #>   na.color         : NA
-    #>   reverse.method   : NA
-    #> 
-    #> Kernel Arguments:
-    #>   mode : "palette"
-    #>   alpha: NA
+colortheme("azurerose", reverse = TRUE, type = "q")
+#> Qualitative Color Theme: 'azurerose' (from 'colortheme')
+#> 
+#> Kernel Class: color
+#> 
+#> Kernel Colors:
+#> #A4136E, #BD4989, #D67FA8, #E8B3CC, #F7F7F7, #AFC4E8, #729BD6, #3B78C2, #005AAD
+#> 
+#> Options:
+#>   kernel.size      : 9L
+#>   palette.formatter: "recycle"
+#>   palette.reverse  : FALSE
+#>   ramp.rescaler    : c(0, 1)
+#>   ramp.steps       : Inf
+#>   na.color         : NA
+#>   reverse.method   : NA
+#> 
+#> Kernel Arguments:
+#>   mode : "palette"
+#>   alpha: NA
+```
 
 ![](colortheme_files/figure-html/unnamed-chunk-6-1.png)
 
-    #> Qualitative Color Theme: 'azurerose' (from 'colortheme')
-    #> 
-    #> Kernel Class: color
-    #> 
-    #> Kernel Colors:
-    #> #A4136E, #BD4989, #D67FA8, #E8B3CC, #F7F7F7, #AFC4E8, #729BD6, #3B78C2, #005AAD
-    #> 
-    #> Options:
-    #>   kernel.size      : 9L
-    #>   palette.formatter: "recycle"
-    #>   palette.reverse  : FALSE
-    #>   ramp.rescaler    : c(0, 1)
-    #>   ramp.steps       : Inf
-    #>   na.color         : NA
-    #>   reverse.method   : NA
-    #> 
-    #> Kernel Arguments:
-    #>   mode : "palette"
-    #>   alpha: NA
+``` r
+
+colortheme("azurerose_r@qualitative")
+#> Qualitative Color Theme: 'azurerose' (from 'colortheme')
+#> 
+#> Kernel Class: color
+#> 
+#> Kernel Colors:
+#> #A4136E, #BD4989, #D67FA8, #E8B3CC, #F7F7F7, #AFC4E8, #729BD6, #3B78C2, #005AAD
+#> 
+#> Options:
+#>   kernel.size      : 9L
+#>   palette.formatter: "recycle"
+#>   palette.reverse  : FALSE
+#>   ramp.rescaler    : c(0, 1)
+#>   ramp.steps       : Inf
+#>   na.color         : NA
+#>   reverse.method   : NA
+#> 
+#> Kernel Arguments:
+#>   mode : "palette"
+#>   alpha: NA
+```
 
 ![](colortheme_files/figure-html/unnamed-chunk-7-1.png)
 
