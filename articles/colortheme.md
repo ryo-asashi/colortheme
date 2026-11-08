@@ -551,7 +551,7 @@ p + scale_color_theme("tokyo@qual")
 
 ``` r
 
-p + scale_color_theme("highlight?which=list(1, 6:7);base='00000000'")
+p + scale_color_theme("highlight?which=list(1, 6:7);base='transparent'")
 ```
 
 ![](colortheme_files/figure-html/unnamed-chunk-18-4.png)
