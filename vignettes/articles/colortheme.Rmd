@@ -1,10 +1,10 @@
 ---
-title: "Getting Started with colortheme: One Interface, Infinite Color Expressiveness"
+title: "Getting Started with Color Themes"
 description: >
-  Why another color package? Discover how colortheme unifies R's fragmented color ecosystem with a zero-dependency architecture and a compact query syntax.
+  Provides an introduction to the colortheme package and a gallery of pre-defined color themes.
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Getting Started with colortheme: One Interface, Infinite Color Expressiveness}
+  %\VignetteIndexEntry{Getting Started with Color Themes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
   fig.width = 6
 )
 
-pkgs <- c("khroma", "viridisLite", "RColorBrewer", "patchwork", "ggplot2", "DT", "htmltools")
+pkgs <- c("khroma", "viridisLite", "RColorBrewer", "ggplot2", "DT", "htmltools")
 to_install <- pkgs[!pkgs %in% rownames(installed.packages())]
 if (length(to_install) > 0L) install.packages(to_install)
 
@@ -35,163 +35,172 @@ show_colors_html <- function(colors, height = "25px") {
 }
 ```
 
-# Why `colortheme`?
+# Color themes
 
-R has a rich ecosystem of color palettes—across **grDevices**, **RColorBrewer**, **viridisLite**, **khroma**, and more. Yet, applying and customizing colors in daily data analysis or package development still involves unnecessary friction:
+The `"colortheme"` object provides two color-generating functions: `palette()` and `ramp()`. The `palette()` function accepts an integer $n$ and returns a vector of $n$ discrete colors. It is primarily intended for **qualitative** themes, where distinct colors are used to represent categorical data. The `ramp()` function accepts a numeric vector $x$ with values in the $[0, 1]$ interval and returns a vector of corresponding colors. It maps numeric values onto a continuous color gradient (or stepped color bands), making it suitable for **sequential** and **diverging** themes as well as binned scales.
 
-1. **Function Explosion in `ggplot2`**: Switching between palette sources or scale types requires rewriting the function call itself—jumping between `scale_color_brewer()`, `scale_color_viridis_d()`, `scale_color_viridis_c()`, `scale_color_gradient2()`, and `scale_color_stepsn()`. Even reversing a palette changes from `direction = -1` to `rev = TRUE` depending on the function.
-2. **Static Aggregators & Heavy Dependencies**: Meta-packages like **paletteer** are fantastic dictionaries for discovering palettes, but they carry a heavy dependency footprint and treat palettes mainly as static color vectors. Expressing dynamic behavior—such as *highlighting specific categories while graying out the rest*, or *quantizing a continuous gradient with a neutral dead-zone*—still requires manual data wrangling or custom scale functions.
-3. **The Base R vs. `ggplot2` Divide**: `ggplot2` scales cannot be used in Base R `plot()` or `image()`, forcing analysts and package authors to manually write rescaling, midpoint alignment, and `NA`-handling logic whenever they step outside `ggplot2`.
+## Pre-defined themes
 
-**`colortheme`** solves these problems not by collecting thousands of static vectors, but by encapsulating **color behavior** into a lightweight, zero-dependency S3 object and a **compact URL-like query syntax**:
-
-```r
-# Traditional approach: different functions, different arguments, manual data prep
-scale_fill_viridis_c(option = "mako", direction = -1, alpha = 0.8)
-scale_fill_fermenter(palette = "RdBu", breaks = c(0.2, 0.8))
-
-# With colortheme: one function, expressive query strings
-scale_fill_theme("mako_r?alpha=0.8")
-scale_fill_theme("RdBu?ramp.steps=c(0.2, 0.8)")
-scale_fill_theme("highlight?which=list(1:2, -1)")
-```
-
----
-
-# 1. Expressive Plotting with **ggplot2**
-
-With `scale_color_theme()` and `scale_fill_theme()`, you never have to switch scale functions again. Everything—source selection, reversal (`_r`), type casting (`@qual`, `@seq`, `@div`), category highlighting, and step quantization (`?ramp.steps=...`)—is controlled through a single string.
-
-### Programmable Highlighting & Discrete Scales
-
-Instead of mutating your data frame to create a `"target vs. others"` column, use the built-in `"highlight"` theme directly in the scale query. You can pass negative indices (e.g., `-1` for the last category) or `list()` objects to group multiple categories under the same accent color. Setting `base = 'transparent'` (or `NA`) visually hides non-target points.
-
-```{r, fig.width = 6, fig.height = 4.2, warning = FALSE}
-library(colortheme)
-library(ggplot2)
-theme_set(theme_minimal(base_size = 10))
-
-set.seed(42)
-dataset <- diamonds[sample(nrow(diamonds), 5000L), ]
-
-p <- ggplot(dataset) + geom_point(aes(carat, price, col = color), size = 1.2)
-p + scale_color_theme("shiki") +
-  ggtitle('"shiki" (Built-in Japanese palette)')
-p + scale_color_theme("viridisLite/mako@qual") +
-  ggtitle('"viridisLite/mako@qual" (cast to Qualitative)')
-p + scale_color_theme("highlight?which=list(1:2, -1)") +
-  ggtitle('"highlight?which=list(1:2, -1)"')
-p + scale_color_theme("highlight?base='transparent'&which=c(1, 7)") +
-  ggtitle('"highlight?base=\'transparent\'&which=c(1, 7)"')
-```
-
-```{r, fig.width = 6, fig.height = 4.2, warning = FALSE}
-p2 <- ggplot(dataset) +
-  geom_histogram(aes(x = carat, fill = cut), bins = 20)
-p2 + scale_fill_theme("ukiyoe") +
-  ggtitle('"ukiyoe"')
-p2 + scale_fill_theme("highlight_r?which=list(1:2, 5)") +
-  ggtitle('"highlight_r?which=list(1:2, 5)"')
-p2 + scale_fill_theme("ai@q") +
-  ggtitle('"ai@q" (cast to Qualitative)')
-p2 + scale_fill_theme("Zissou 1_r@q") +
-  ggtitle('"Zissou 1_r@q"')
-```
-
-### Continuous, Diverging, and Stepped Scales
-
-For continuous variables, diverging themes automatically align their center color to `middle` (default `0`) via `scales::rescale_mid()`. Furthermore, adding `?ramp.steps=k` (for $k$ equal bins) or `?ramp.steps=c(...)` (for custom cutoffs in $(0, 1)$) converts *any* continuous theme into a stepped (binned) scale on the fly.
-
-```{r, fig.width = 6, fig.height = 4.2, warning = FALSE}
-p3 <- ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
-  geom_raster()
-p3 + scale_fill_theme("ai") +
-  ggtitle('"ai"')
-p3 + scale_fill_theme("Cividis", middle = 0.02) +
-  ggtitle('"Cividis"')
-p3 + scale_fill_theme("steps", middle = 0.02) +
-  ggtitle('"steps"')
-p3 + scale_fill_theme("magma?ramp.steps=11&alpha=0.8") +
-  ggtitle('"magma?ramp.steps=9&alpha=0.8"')
-```
-
----
-
-# 2. The Query Syntax & Core Mechanics
-
-Every `"colortheme"` object encapsulates two color-generating functions:
-
-- **`$palette(n)`**: Accepts an integer $n$ and returns $n$ discrete colors (recycling or interpolating as configured).
-- **`$ramp(x)`**: Accepts a numeric vector $x \in [0, 1]$ and maps it onto a continuous or stepped color gradient.
+You can get a pre-defined `"colortheme"` object by providing a theme name to the `colortheme()` function.
 
 ```{r, fig.height = 1.2, fig.width = 6, warning = FALSE}
+library(colortheme)
+# diverging color theme "azurerose" (package:colortheme)
 azurerose <- colortheme("azurerose")
 print(azurerose)
 ```
 
-You can call `$palette()` and `$ramp()` directly, or extract standalone functions via `as_palette()` and `as_ramp()`:
+The palette and ramp functions are accessible via `$` operator.
 
 ```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
 azurerose$palette(5)
-# as_palette(azurerose)(5)
 show_colors_html(azurerose$palette(5))
 azurerose$ramp(seq.int(0, 1, by = 0.1))
-# as_ramp(azurerose)(seq.int(0, 1, by = 0.1))
 show_colors_html(azurerose$ramp(seq.int(0, 1, by = 0.1)))
 ```
 
-### Compact Query Grammar: `source/name_r@type?key=value`
+```{r, fig.height = 1.2, fig.width = 6}
+# sequential color theme "viridis" (package:viridisLite)
+viridis <- colortheme("viridis")
+print(viridis)
+```
 
-Instead of nested function calls, you can modify any theme using a single string:
+The palette and ramp can also be extracted using corresponding helper functions; `as_palette()` and `as_ramp()`.
 
-1. **Prefix (`source/`)**: Disambiguate themes with identical names across packages (e.g., `"RColorBrewer/Paired"` vs. `"grDevices/Paired"`).
-2. **Reversal (`_r`)**: Append `_r` to the theme name to reverse the color order.
-3. **Type Casting (`@seq`, `@div`, `@qual`)**: Convert a sequential theme into a qualitative palette (which also turns its `$ramp()` into a stepped ramp by default) or vice versa.
-4. **Query Parameters (`?k1=v1;k2=v2` or `&`)**: Pass kernel arguments (`alpha`, `begin`, `end`, `which`) or theme options (`ramp.steps`, `na.color`, `kernel.size`) as R expressions.
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+as_palette(viridis)(5)
+show_colors_html(viridis$palette(5))
+as_ramp(viridis)(seq.int(0, 1, by = 0.1))
+show_colors_html(viridis$ramp(seq.int(0, 1, by = 0.1)))
+```
+
+You can modify themes by **reversing** the color order or **changing** the theme type (e.g., from sequential to qualitative). Note that converting a theme to `@qualitative` also turns its `$ramp()` into a stepped (binned) color ramp by default. These changes can be applied in two ways:
+
+1. **Using Arguments** : provide the appropriate argument to the function, such as `reverse = TRUE` or `type = "qualitative"`.
+2. **Using Suffixes** : for convenience, you can append a suffix directly to the theme's name. `_r` to reverse the theme, `@q` (or longer, such as `@qual`) to make the theme qualitative (`@d` for diverging, `@s` for sequential).
 
 ```{r, fig.height = 1.2, fig.width = 6}
-# Equivalent ways to customize a theme: via arguments vs. query syntax
-colortheme("viridis", type = "qualitative", kernel.size = 7, begin = 0, end = 1)
+colortheme("azurerose", reverse = TRUE, type = "q")
+```
+
+```{r, fig.height = 1.2, fig.width = 6}
+colortheme("azurerose_r@qualitative")
+```
+
+You can also customize kernel arguments and option parameters on the fly using query parameters after `?` (e.g., `"highlight?which=1:2"` or `"viridis?ramp.steps=5"`).
+
+```{r, fig.height = 1.2, fig.width = 6}
+colortheme("viridis", type = "q", kernel.size = 7, begin = 0, end = 1)
+```
+
+```{r, fig.height = 1.2, fig.width = 6}
 colortheme("viridis@qual?kernel.size=7;begin=0;end=1")
 ```
 
-```{r, fig.height = 1.2, fig.width = 6}
-# Quantize into 11 equal steps, or split at custom cutoffs
-colortheme("azurerose?ramp.steps=11")
-colortheme("azurerose?ramp.steps=seq.int(.4, .6, by = .02)")
-```
-
----
-
-# 3. Direct Data Mapping for Base R & Package Developers
-
-If you use Base R graphics, or if you are developing an R package that provides plotting methods, `map_to_colors()` gives you the same power without requiring **ggplot2**.
-
-```{r, fig.width = 6, fig.height = 3}
-par(mfrow = c(1L, 2L), mar = c(3, 3, 1, 1))
-# Sequential mapping
-plot(cars, col = map_to_colors(cars$speed), pch = 19, cex = 1.2)
-plot(cars, col = map_to_colors(cars$speed, "ukiyoe"), pch = 19, cex = 1.2)
-
-# Discrete highlighting in Base R
-plot(iris$Sepal.Length, iris$Sepal.Width, pch = 19,
-     col = map_to_colors(iris$Species, "highlight?which=1"))
-plot(iris$Sepal.Length, iris$Sepal.Width, pch = 19,
-     col = map_to_colors(iris$Species, "highlight_r?which=-1"))
-```
-
-### Creating & Registering Custom Themes
-
-You can also construct a `"colortheme"` from any hex vector or palette function, register it into the session via `register_colortheme()`, and set package-wide defaults via `colortheme_options()`.
+By setting `ramp.steps` (either as an integer for equal bins or as a numeric vector of cutoffs in $(0, 1)$), any continuous theme can be quantized into a stepped color ramp:
 
 ```{r, fig.height = 1.2, fig.width = 6}
+# Quantize into 5 equal steps
+colortheme("azurerose?ramp.steps=5")
+
+# Split at custom cutoffs to create a desired ramp
+colortheme("azurerose?ramp.steps=seq.int(.4, .6, by=.02)")
+```
+
+When multiple packages provide a theme with the same name (e.g., `"Paired"`), you can specify which one to use in two ways:
+
+1. **Using Argument** : provide the package name to the `source` argument (e.g., `source = "grDevices"`).
+2. **Using Prefix** : prepend the package name and a forward slash to the theme name (e.g., `"RColorBrewer/Paired"`).
+
+```{r, fig.height = 1.2, fig.width = 6}
+# qualitative color theme "Paired" (package:grDevices)
+colortheme("Paired", source = "grDevices")
+```
+
+```{r, fig.height = 1.2, fig.width = 6}
+# qualitative color theme "Paired" (package:RColorBrewer)
+colortheme("RColorBrewer/Paired")
+```
+
+## Custom themes
+
+Alternatively, you can create a new `"colortheme"` object by passing a custom color vector or function to the first argument of `colortheme()`.
+
+```{r, fig.height = 1.2, fig.width = 6}
+# create a new color theme using a color vector
 mytheme <- colortheme(
   c("#003f5c", "#7a5195", "#ef5675", "#ffa600"),
   type = "sequential", name = "mytheme"
 )
+print(mytheme)
+```
+
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+as_palette(mytheme)(5)
+show_colors_html(mytheme$palette(5))
+as_ramp(mytheme)(seq.int(0, 1, by = 0.1))
+show_colors_html(mytheme$ramp(seq.int(0, 1, by = 0.1)))
+```
+
+```{r, fig.height = 1.2, fig.width = 6}
+# create a new color theme using a color function
+rainbow <- colortheme(
+  grDevices::rainbow,
+  name = "rainbow", source = "grDevices"
+)
+print(rainbow)
+```
+
+```{r, fig.height = 0.35, fig.width = 6, echo = c(-2, -4)}
+as_palette(rainbow)(5)
+show_colors_html(rainbow$palette(5))
+as_ramp(rainbow)(seq.int(0, 1, by = 0.1))
+show_colors_html(rainbow$ramp(seq.int(0, 1, by = 0.1)))
+```
+
+You can register a custom theme to call it by name later in your current R session. To do so, use the `register_colortheme()` function.
+
+```{r, fig.height = 1.2, fig.width = 6}
 register_colortheme(mytheme, name = "mytheme", source = "custom")
-colortheme("custom/mytheme")
-colortheme("custom/mytheme_r@q?alpha=0.8")
+colortheme("custom/mytheme@q")
+colortheme("mytheme_r@div?alpha=.5")
+```
+
+## Using themes with **ggplot2**
+
+To apply your color themes to **ggplot2** plots, use the `scale_color_theme()` and `scale_fill_theme()` functions. These scales integrate your themes directly into the plot's `color` and `fill` aesthetics.
+
+```{r, fig.width = 6, fig.height = 4, warning = FALSE}
+library(ggplot2)
+theme_set(theme_minimal())
+
+set.seed(42)
+dataset <- diamonds[sample(nrow(diamonds), 5000L), ]
+
+p <- ggplot(dataset) + geom_point(aes(carat, price, col = color))
+p + scale_color_theme("shiki")
+p + scale_color_theme("viridisLite/mako", discrete = TRUE)
+p + scale_color_theme("tokyo@qual")
+p + scale_color_theme("highlight?which=list(1, 6:7);base='transparent'")
+```
+
+```{r, fig.width = 6, fig.height = 4, warning = FALSE}
+p2 <- ggplot(dataset) +
+  geom_histogram(aes(x = carat, fill = cut), bins = 20)
+p2 + scale_fill_theme("ukiyoe")
+p2 + scale_fill_theme("highlight_r?which=list(1:2, 5)")
+p2 + scale_fill_theme("ai@q")
+p2 + scale_fill_theme("Zissou 1_r@q")
+```
+
+```{r, fig.width = 6, fig.height = 4, warning = FALSE}
+# Continuous and stepped scales with sequential, diverging, and qualitative themes
+p3 <- ggplot(faithfuld, aes(waiting, eruptions, fill = density)) +
+  geom_raster() + theme(legend.position = "right")
+p3 + scale_fill_theme("ai")
+p3 + scale_fill_theme("Cividis", middle = 0.02)
+p3 + scale_fill_theme("steps", middle = 0.02)
+p3 + scale_fill_theme("magma?ramp.steps=6&alpha=0.8")
 ```
 
 ```{r, echo = FALSE}
@@ -199,11 +208,9 @@ remove("mytheme", envir = getOption("colortheme.registry"))
 .df <- colorthemes()
 ```
 
----
+# Pre-defined color themes
 
-# 4. Pre-defined Color Themes Gallery
-
-The following color themes are available when **colortheme** is loaded (themes from **viridisLite**, **RColorBrewer**, and **khroma** are lazily enabled when those packages are installed).
+The following color themes are available when the **colortheme** package is loaded. Some themes depend on other packages being installed, so for full functionality, please ensure you have already installed the **viridisLite**, **RColorBrewer**, and **khroma** packages.
 
 ```{r table, echo = FALSE}
 DT::datatable(
@@ -217,6 +224,7 @@ DT::datatable(
   )
 )
 ```
+
 
 ## Sequential Color Themes
 
