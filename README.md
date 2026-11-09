@@ -21,6 +21,11 @@ definitions, and popular palette collections (**grDevices**,
 **viridisLite**, **RColorBrewer**, **khroma**, etc.), while offering
 seamless scale integration for **ggplot2**.
 
+## Cheatsheets
+
+![](man/figures/colortheme_cheatsheet_1.png)
+![](man/figures/colortheme_cheatsheet_2.png)
+
 ## Features
 
 1.  **Unified Dispatcher (`colortheme()`)**: Effortlessly retrieve
